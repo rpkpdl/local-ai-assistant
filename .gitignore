@@ -1,0 +1,11 @@
+.venv/
+memories.db*
+memories.json
+__pycache__/
+.env
+.phoenix/
+local_run.md
+*.db-wal
+*.db-shm
+.DS_Store
+CLAUDE.md
