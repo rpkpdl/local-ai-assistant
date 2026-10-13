@@ -1,5 +1,7 @@
 # Local AI Assistant
 
+[![CI](https://github.com/rpkpdl/local-ai-assistant/actions/workflows/ci.yml/badge.svg)](https://github.com/rpkpdl/local-ai-assistant/actions/workflows/ci.yml)
+
 A personal AI assistant with long-term memory, built directly on the Anthropic Python SDK, with
 no agent framework. All data (memories, saved web sources, fetched pages and the audit log) lives
 in one local SQLite file that you own and can inspect.
@@ -91,7 +93,9 @@ try to manipulate it.
   on Claude, even when the agent runs on a small local model that is easier to talk round.
 
 **Local server**
-- Binds to `127.0.0.1` only, with a trusted host check.
+- Binds to `127.0.0.1` only, with a trusted host check. In Docker the app has to listen on
+  `0.0.0.0` inside the container, so compose publishes the port on the host's `127.0.0.1` only.
+  The result is the same: unreachable from the network.
 - Origin checks plus JSON-only POSTs protect against CSRF.
 - No auto-generated API docs routes.
 - The markdown renderer escapes HTML before formatting and loads nothing from a CDN.
@@ -117,19 +121,39 @@ truncates fetched pages.
 
 ## Getting started
 
-Requirements: Python 3, an [Anthropic API key](https://console.anthropic.com/), and optionally a
-[Brave Search API key](https://brave.com/search/api/) and [Ollama](https://ollama.com/).
+You need an [Anthropic API key](https://console.anthropic.com/). A
+[Brave Search API key](https://brave.com/search/api/) is optional (enables web search).
 
 ```bash
 git clone https://github.com/rpkpdl/local-ai-assistant.git
 cd local-ai-assistant
 cp .env.example .env      # then add your ANTHROPIC_API_KEY (and BRAVE_API_KEY for web search)
+```
+
+### Option 1: Docker (quickest)
+
+```bash
+docker compose up --build
+```
+
+- Assistant: http://127.0.0.1:8000
+- Phoenix traces: http://127.0.0.1:6006
+
+Memories and traces are kept in Docker volumes, so they survive rebuilds. The Docker setup runs
+on Claude. For a local model, use option 2.
+
+### Option 2: Run locally (for development, or a local model)
+
+Requires Python 3.11+.
+
+```bash
 ./start.sh                # web UI on http://127.0.0.1:8000
 ./start.sh --cli          # or chat in the terminal
 ```
 
 `start.sh` creates the virtual environment, installs the package (`pip install -e ".[phoenix,dev]"`),
-checks your `.env`, and starts Phoenix if tracing is enabled.
+checks your `.env`, and starts Phoenix if tracing is enabled. To use a local model, install
+[Ollama](https://ollama.com/), pull a model and set `ASSISTANT_MODEL` in `.env`.
 
 | Setting in `.env` | Purpose |
 |---|---|
@@ -139,6 +163,18 @@ checks your `.env`, and starts Phoenix if tracing is enabled.
 | `ASSISTANT_MODEL` | e.g. `gemma4:e4b` to run on Ollama. Defaults to Claude |
 | `OLLAMA_URL` | Defaults to `http://127.0.0.1:11434` |
 | `PHOENIX_COLLECTOR_ENDPOINT` | Enables tracing. Phoenix UI on http://127.0.0.1:6006 |
+
+## Testing
+
+```bash
+.venv/bin/pytest          # offline: no API key or network needed
+.venv/bin/ruff check .
+```
+
+The tests focus on the security guards: blocked URLs, private and metadata IPs at connect time,
+redirects into private networks, content types, Host/Origin/CSRF checks on the server, the
+checks around saving sources, and the memory stores. CI runs them on every push, plus a Docker
+build and smoke test.
 
 ## Known limitations
 

@@ -1,0 +1,17 @@
+.git
+.github
+.venv
+.env
+.phoenix
+memories.db*
+memories.json
+**/__pycache__
+*.egg-info
+.pytest_cache
+.ruff_cache
+tests
+evals
+docs
+scripts
+CLAUDE.md
+local_run.md

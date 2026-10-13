@@ -1,0 +1,39 @@
+# docker compose up --build
+#   assistant: http://127.0.0.1:8000
+#   Phoenix:   http://127.0.0.1:6006
+#
+# Both ports are published on the host's loopback only, so nothing is reachable from the
+# network. Memories and traces live in named volumes and survive rebuilds.
+
+services:
+  assistant:
+    build: .
+    env_file: .env
+    environment:
+      PHOENIX_COLLECTOR_ENDPOINT: http://phoenix:6006
+      # Ollama normally listens on the host's loopback, which a container can't reach.
+      # To run on a local model, use ./start.sh instead.
+      ASSISTANT_MODEL: claude-opus-5-5
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - assistant-data:/data
+    depends_on:
+      - phoenix
+    restart: unless-stopped
+
+  phoenix:
+    image: arizephoenix/phoenix:latest
+    environment:
+      PHOENIX_WORKING_DIR: /mnt/data
+      PHOENIX_TELEMETRY_ENABLED: "false"
+      PHOENIX_ALLOW_EXTERNAL_RESOURCES: "false"
+    ports:
+      - "127.0.0.1:6006:6006"
+    volumes:
+      - phoenix-data:/mnt/data
+    restart: unless-stopped
+
+volumes:
+  assistant-data:
+  phoenix-data:
