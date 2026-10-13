@@ -12,3 +12,4 @@ CLAUDE.md
 *.egg-info/
 .pytest_cache/
 .ruff_cache/
+.private-terms

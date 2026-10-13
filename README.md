@@ -179,6 +179,18 @@ redirects into private networks, content types, Host/Origin/CSRF checks on the s
 checks around saving sources, and the memory stores. CI runs them on every push, plus a Docker
 build and smoke test.
 
+### Keeping personal data out of the repo
+
+The assistant's database holds real personal memories, so commits are checked before they
+happen. `scripts/check_private.py` runs as a pre-commit hook. It blocks commits that contain API
+keys, files that must stay local (`.env`, databases, traces), the text of any stored memory, or
+terms listed in a local, gitignored `.private-terms` file. Examples, tests and evals use synthetic
+data only. CI runs the same script for keys and forbidden files.
+
+```bash
+git config core.hooksPath .githooks   # once per clone
+```
+
 ## Evals
 
 Tests check correctness. [Evals](evals/) measure behavior, with scores tracked over time:
@@ -195,6 +207,12 @@ vector search on the roadmap.
 .venv/bin/python evals/run_eval.py memory --mode retrieval   # free
 .venv/bin/python evals/run_eval.py judge                     # ~$0.05
 ```
+
+## Findings
+
+[docs/findings.md](docs/findings.md) is a dated log of things observed while building this, each
+with evidence, cause and outcome. For example, it shows why a 4B local model never searched
+memory when Claude did.
 
 ## Known limitations
 
