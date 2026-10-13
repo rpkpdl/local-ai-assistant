@@ -150,8 +150,8 @@ checks your `.env`, and starts Phoenix if tracing is enabled.
 
 ## Roadmap
 
-1. **Phone access:** private HTTPS access over Tailscale (the server stays bound to localhost),
-   an installable mobile web app (PWA), saved conversations and prompt caching.
+1. **Phone access:** secure remote access, an installable mobile web app (PWA), saved
+   conversations and prompt caching.
 2. **Voice:** speech-to-text with local Whisper, text-to-speech, then a hands-free mode. Store
    transcripts, not audio.
 3. **Better recall:** hybrid keyword + vector search (fastembed + sqlite-vec).
