@@ -30,7 +30,7 @@ through Ollama.
 ## Architecture
 
 ```text
- Browser UI ──NDJSON stream──▶ FastAPI (server.py)          Terminal (assistant.py)
+ Browser UI ──NDJSON stream──▶ FastAPI (server.py)          Terminal (cli.py)
                                       │                              │
                                       └──────────┬───────────────────┘
                                                  ▼
@@ -40,37 +40,41 @@ through Ollama.
         ┌───────────────────┬───────────────────┼────────────────────┐
         ▼                   ▼                   ▼                    ▼
   Memory tools        find_sources         web_search          http_get
-  (memory.py)         save_source          (search.py,         (fetch.py,
-  SQLite FTS5         (sources.py)         Brave API +         SSRF guard,
+  (memory.py)         save_source          (web/search.py,     (web/fetch.py,
+  SQLite FTS5         (web/sources.py)     Brave API +         SSRF guard,
                            │               monthly quota)      page cache,
                            ▼                                   audit log)
                     SourceJudge
-                (source_judge.py,
+                    (judge.py,
                  tool-less LLM check)
 
                All state ──▶ memories.db (SQLite)    Traces ──▶ Phoenix (optional)
 ```
 
-| File | Role |
-|---|---|
-| `agent.py` | Agent loop, system prompt, memory tools, model and pricing config, event stream |
-| `memory.py` | `MemoryStore` interface with SQLite (FTS5) and JSON implementations |
-| `web_tools.py` | Web tools exposed to the model |
-| `fetch.py` | SSRF-guarded fetcher, page cache and fetch audit log |
-| `search.py` | Brave Search client with a monthly quota counter |
-| `sources.py` | Saved URL templates per task |
-| `source_judge.py` | Independent approve/reject check for new sources |
-| `tracing.py` | Phoenix / OpenInference setup and traced SQLite connection |
-| `server.py` | FastAPI app: streaming chat, memories and sources endpoints |
-| `static/index.html` | Web UI (no build step, no external resources) |
-| `docs/database.md` | Every table in the database, with example queries |
+```text
+assistant/              the application package
+├── agent.py            agent loop, system prompt, memory tools, model and pricing config
+├── memory.py           MemoryStore interface: SQLite (FTS5) and JSON implementations
+├── judge.py            independent approve/reject check for new sources
+├── tracing.py          Phoenix / OpenInference setup, traced SQLite connection
+├── server.py           FastAPI app: streaming chat, memories and sources endpoints
+├── cli.py              terminal chat
+├── static/index.html   web UI (no build step, no external resources)
+└── web/                everything that touches the internet
+    ├── tools.py        web tools exposed to the model
+    ├── fetch.py        SSRF-guarded fetcher, page cache, audit log
+    ├── search.py       Brave Search client with a monthly quota
+    └── sources.py      saved URL templates per task
+scripts/run_phoenix.sh  local Phoenix trace UI
+docs/database.md        every table in the database, with example queries
+```
 
 ## Security design
 
 The agent reads untrusted web content and can call tools, so the design assumes fetched pages may
 try to manipulate it.
 
-**Fetching (`fetch.py`)**
+**Fetching (`assistant/web/fetch.py`)**
 - Only `http`/`https` on ports 80 and 443.
 - Every resolved IP must be public (`ipaddress.is_global`), and the connection is pinned to the IP
   that was checked. This blocks DNS rebinding, where a hostname resolves to a public IP during the
@@ -124,8 +128,8 @@ cp .env.example .env      # then add your ANTHROPIC_API_KEY (and BRAVE_API_KEY f
 ./start.sh --cli          # or chat in the terminal
 ```
 
-`start.sh` creates the virtual environment, installs dependencies, checks your `.env`, and starts
-Phoenix if tracing is enabled.
+`start.sh` creates the virtual environment, installs the package (`pip install -e ".[phoenix,dev]"`),
+checks your `.env`, and starts Phoenix if tracing is enabled.
 
 | Setting in `.env` | Purpose |
 |---|---|

@@ -1,13 +1,18 @@
 """Web UI for the personal assistant.
 
-Run:  python server.py   ->  http://127.0.0.1:8000
+Run:  python -m assistant.server   ->  http://127.0.0.1:8000
 
 Local-only by design: binds to 127.0.0.1, rejects requests whose Host isn't
 localhost (DNS rebinding), and rejects cross-origin / non-JSON POSTs so other
 websites open in your browser can't drive the agent.
+
+ASSISTANT_HOST overrides the bind address. Only the Docker image sets it (to 0.0.0.0,
+so Docker can forward traffic in); docker-compose.yml then publishes the port on the
+host's 127.0.0.1 only, so the app is still unreachable from the network.
 """
 
 import json
+import os
 from pathlib import Path
 
 import uvicorn
@@ -16,9 +21,10 @@ from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
-from agent import EFFORT, MODEL, Agent
+from .agent import EFFORT, MODEL, Agent
 
-HOST, PORT = "127.0.0.1", 8000
+HOST, PORT = os.getenv("ASSISTANT_HOST") or "127.0.0.1", 8000
+ALLOWED_ORIGINS = (f"http://127.0.0.1:{PORT}", f"http://localhost:{PORT}")
 STATIC = Path(__file__).parent / "static"
 
 agent = Agent()
@@ -28,7 +34,7 @@ app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost
 
 def check_same_origin(request: Request) -> None:
     origin = request.headers.get("origin")
-    if origin is not None and origin not in (f"http://{HOST}:{PORT}", f"http://localhost:{PORT}"):
+    if origin is not None and origin not in ALLOWED_ORIGINS:
         raise HTTPException(403, "cross-origin request refused")
     if not request.headers.get("content-type", "").startswith("application/json"):
         raise HTTPException(415, "JSON required")
@@ -80,5 +86,5 @@ def sources():
 
 
 if __name__ == "__main__":
-    print(f"Open http://{HOST}:{PORT}")
+    print(f"Open http://127.0.0.1:{PORT}")
     uvicorn.run(app, host=HOST, port=PORT, log_level="warning")

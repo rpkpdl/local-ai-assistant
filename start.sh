@@ -26,9 +26,9 @@ if [[ ! -x .venv/bin/python ]]; then
   python3 -m venv .venv
 fi
 if ! .venv/bin/python -c "import anthropic, dotenv, httpx, fastapi, uvicorn, phoenix.otel" 2>/dev/null \
-   || [[ requirements.txt -nt .venv/.installed ]]; then
+   || [[ pyproject.toml -nt .venv/.installed ]]; then
   warn "Installing dependencies (first run can take a few minutes)"
-  .venv/bin/pip install -q -r requirements.txt
+  .venv/bin/pip install -q -e ".[phoenix,dev]"
   touch .venv/.installed
 fi
 ok "Python environment"
@@ -60,7 +60,7 @@ if env_has PHOENIX_COLLECTOR_ENDPOINT; then
     ok "Phoenix already running (http://127.0.0.1:6006)"
   else
     mkdir -p .phoenix
-    ./run_phoenix.sh > .phoenix/phoenix.log 2>&1 &
+    scripts/run_phoenix.sh > .phoenix/phoenix.log 2>&1 &
     PHOENIX_PID=$!
     printf '  … starting Phoenix'
     for _ in $(seq 1 60); do
@@ -79,9 +79,9 @@ fi
 # 4. The app
 echo
 if [[ "$MODE" == "cli" ]]; then
-  .venv/bin/python assistant.py
+  .venv/bin/python -m assistant.cli
 else
   port_open 8000 && fail "Port 8000 is already in use - is the assistant already running?"
   ok "Starting web UI - press Ctrl+C to stop"
-  .venv/bin/python server.py
+  .venv/bin/python -m assistant.server
 fi

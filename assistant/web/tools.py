@@ -13,10 +13,10 @@ from urllib.parse import urlsplit
 import httpx
 from anthropic import beta_tool
 
-from fetch import BlockedURL, Fetcher
-from search import QuotaExceeded, SearchProvider
-from source_judge import Verdict
-from sources import SourceStore
+from ..judge import Verdict
+from .fetch import BlockedURL, Fetcher
+from .search import QuotaExceeded, SearchProvider
+from .sources import SourceStore
 
 
 def _untrusted(origin: str, body: str) -> str:

@@ -16,11 +16,11 @@ Tables are created automatically on first run by the module that owns them.
 
 | Table | Defined in | Purpose |
 |---|---|---|
-| [`memories`](#memories) | `memory.py` | Facts about the user (long-term memory) |
-| [`sources`](#sources) | `sources.py` | Known-good URL templates for recurring tasks |
-| [`pages`](#pages) | `fetch.py` | Local cache of fetched page/API content |
-| [`fetch_log`](#fetch_log) | `fetch.py` | Audit log of every fetch attempt |
-| [`search_usage`](#search_usage) | `search.py` | Brave searches per month, for the quota cap |
+| [`memories`](#memories) | `assistant/memory.py` | Facts about the user (long-term memory) |
+| [`sources`](#sources) | `assistant/web/sources.py` | Known-good URL templates for recurring tasks |
+| [`pages`](#pages) | `assistant/web/fetch.py` | Local cache of fetched page/API content |
+| [`fetch_log`](#fetch_log) | `assistant/web/fetch.py` | Audit log of every fetch attempt |
+| [`search_usage`](#search_usage) | `assistant/web/search.py` | Brave searches per month, for the quota cap |
 
 ### `memories`
 
@@ -48,7 +48,7 @@ CREATE VIRTUAL TABLE memories USING fts5(id UNINDEXED, content, tags, created_at
 
 URL templates that worked for a kind of task, so repeat requests skip the web search. Written by
 `save_source` after the URL was fetched successfully and the independent LLM check
-(`source_judge.py`) approved it.
+(`assistant/judge.py`) approved it.
 
 ```sql
 CREATE TABLE sources (
@@ -73,7 +73,7 @@ CREATE TABLE sources (
 - Saving the same `url_template` again updates the existing row and resets `consecutive_failures`.
 - `save_source(..., replaces_source_id=N)` saves the new source and deletes source `N`;
   `delete_source` removes one.
-- `check_reason` was added after the table first existed; `sources.py` adds the column to older
+- `check_reason` was added after the table first existed; `assistant/web/sources.py` adds the column to older
   databases automatically.
 
 ### `pages`
@@ -100,7 +100,7 @@ This is content from the internet. Treat it as untrusted.
 
 ### `fetch_log`
 
-Every fetch attempt, including blocked ones. Written by `fetch.py`.
+Every fetch attempt, including blocked ones. Written by `assistant/web/fetch.py`.
 
 ```sql
 CREATE TABLE fetch_log (ts REAL, url TEXT, outcome TEXT, detail TEXT)

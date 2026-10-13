@@ -9,3 +9,6 @@ local_run.md
 *.db-shm
 .DS_Store
 CLAUDE.md
+*.egg-info/
+.pytest_cache/
+.ruff_cache/

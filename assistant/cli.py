@@ -1,6 +1,6 @@
-"""Terminal chat for the personal assistant. For the web UI, run server.py instead.
+"""Terminal chat for the personal assistant. For the web UI, run assistant.server instead.
 
-Run:  python assistant.py [--store sqlite|json] [--auto-recall] [--quiet]
+Run:  python -m assistant.cli [--store sqlite|json] [--auto-recall] [--quiet]
 
 Memory is exposed to Claude as three tools (remember / recall / forget).
 With --auto-recall, relevant memories are also retrieved up front and
@@ -16,7 +16,7 @@ REPL commands: /memories  list everything stored
 
 import argparse
 
-from agent import MODEL, Agent
+from .agent import MODEL, Agent
 
 
 def main():

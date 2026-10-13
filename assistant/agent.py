@@ -1,4 +1,4 @@
-"""The assistant core, shared by the terminal REPL (assistant.py) and the web UI (server.py).
+"""The assistant core, shared by the terminal REPL (cli.py) and the web UI (server.py).
 
 `Agent.stream_turn(text)` runs one conversation turn and yields events:
   {"type": "text_start"}                                   a new text block begins
@@ -21,17 +21,17 @@ import queue
 import sqlite3
 import threading
 import time
-from typing import Callable, Iterator
+from collections.abc import Callable, Iterator
 
 import anthropic
 from anthropic import beta_tool
 from dotenv import load_dotenv
 
-from memory import JSONMemoryStore, MemoryStore, SQLiteMemoryStore
-from search import BraveSearch
-from source_judge import SourceJudge
-from tracing import setup_tracing, trace_tools, turn_span
-from web_tools import make_web_tools
+from .judge import SourceJudge
+from .memory import JSONMemoryStore, MemoryStore, SQLiteMemoryStore
+from .tracing import setup_tracing, trace_tools, turn_span
+from .web.search import BraveSearch
+from .web.tools import make_web_tools
 
 load_dotenv()  # reads ANTHROPIC_API_KEY etc. from .env
 
@@ -134,7 +134,8 @@ def cost_of(model: str, usage) -> float | None:
 
 class Agent:
     def __init__(self, store_kind: str = "sqlite", auto_recall: bool = False,
-                 db_path: str = "memories.db"):
+                 db_path: str | None = None):
+        db_path = db_path or os.getenv("ASSISTANT_DB") or "memories.db"
         self.tracing = setup_tracing()  # before any SQLite connection is opened
         # Connections are shared with the worker thread; turns are serialized by self._lock
         self.store: MemoryStore = (SQLiteMemoryStore(db_path) if store_kind == "sqlite"
