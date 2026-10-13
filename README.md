@@ -67,8 +67,11 @@ assistant/              the application package
     ├── fetch.py        SSRF-guarded fetcher, page cache, audit log
     ├── search.py       Brave Search client with a monthly quota
     └── sources.py      saved URL templates per task
+tests/                  offline pytest suite (security guards, server, memory)
+evals/                  scored evals with datasets and saved results
 scripts/run_phoenix.sh  local Phoenix trace UI
 docs/database.md        every table in the database, with example queries
+Dockerfile, docker-compose.yml
 ```
 
 ## Security design
@@ -176,6 +179,23 @@ redirects into private networks, content types, Host/Origin/CSRF checks on the s
 checks around saving sources, and the memory stores. CI runs them on every push, plus a Docker
 build and smoke test.
 
+## Evals
+
+Tests check correctness. [Evals](evals/) measure behavior, with scores tracked over time:
+
+| Eval | What it measures | Latest result |
+|---|---|---|
+| Memory recall (retrieval) | Does memory search find the right fact? 22 questions, 12 of them paraphrased | 10/10 direct, **0/12 paraphrased** |
+| Source judge | Approve good APIs, reject junk pages and 5 prompt-injection attempts | **11/11**, including all 5 injections |
+
+The 0/12 is the known weakness of keyword search, now measured. It's the baseline for the
+vector search on the roadmap.
+
+```bash
+.venv/bin/python evals/run_eval.py memory --mode retrieval   # free
+.venv/bin/python evals/run_eval.py judge                     # ~$0.05
+```
+
 ## Known limitations
 
 - `recall` is keyword search, so it misses paraphrases ("what do I like to drink" won't find a
@@ -192,4 +212,5 @@ build and smoke test.
    transcripts, not audio.
 3. **Better recall:** hybrid keyword + vector search (fastembed + sqlite-vec).
 4. **Multi-device sync:** UUID ids, timestamps and soft deletes.
-5. **Memory eval:** a small question set to measure retrieval changes.
+5. **More evals:** run the memory eval through the full agent on Claude and on local models, and
+   add cases for facts that change over time.
