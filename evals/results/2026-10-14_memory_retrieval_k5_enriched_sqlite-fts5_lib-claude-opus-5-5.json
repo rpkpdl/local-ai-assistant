@@ -1,0 +1,479 @@
+{
+  "eval": "memory_retrieval_k5_enriched",
+  "model": "sqlite-fts5",
+  "librarian_model": "claude-opus-5-5",
+  "date": "2026-10-14",
+  "cost": 0.0592,
+  "summary": {
+    "direct": {
+      "hit": "10/10"
+    },
+    "paraphrase": {
+      "hit": "12/12"
+    },
+    "updated": {
+      "hit": "3/3"
+    },
+    "series": {
+      "hit": "1/2"
+    },
+    "profile": {
+      "hit": "3/3"
+    },
+    "all": {
+      "hit": "29/30"
+    }
+  },
+  "rows": [
+    {
+      "q": "Do I take sugar in my green tea?",
+      "expects": "tea",
+      "type": "direct",
+      "answer_any": [
+        "no sugar",
+        "without sugar",
+        "don't take sugar",
+        "do not take sugar"
+      ],
+      "ranked": [
+        "tea"
+      ],
+      "rank": 1,
+      "in_profile": false,
+      "hit": true
+    },
+    {
+      "q": "What's my usual hot beverage?",
+      "expects": "tea",
+      "type": "paraphrase",
+      "answer_any": [
+        "green tea"
+      ],
+      "ranked": [
+        "tea"
+      ],
+      "rank": 1,
+      "in_profile": false,
+      "hit": true
+    },
+    {
+      "q": "Where does Maya live?",
+      "expects": "sister",
+      "type": "direct",
+      "answer_any": [
+        "seattle"
+      ],
+      "ranked": [
+        "sister",
+        "city"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "Does my sibling live on the west coast?",
+      "expects": "sister",
+      "type": "paraphrase",
+      "answer_any": [
+        "seattle"
+      ],
+      "ranked": [
+        "sister",
+        "city"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "What is Biscuit's breed?",
+      "expects": "dog",
+      "type": "direct",
+      "answer_any": [
+        "golden retriever"
+      ],
+      "ranked": [],
+      "rank": null,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "What kind of pet do I have?",
+      "expects": "dog",
+      "type": "paraphrase",
+      "answer_any": [
+        "golden retriever",
+        "dog"
+      ],
+      "ranked": [
+        "dog"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "Am I allergic to anything?",
+      "expects": "allergy",
+      "type": "direct",
+      "answer_any": [
+        "peanut"
+      ],
+      "ranked": [
+        "allergy"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "Which foods should I avoid eating?",
+      "expects": "allergy",
+      "type": "paraphrase",
+      "answer_any": [
+        "peanut"
+      ],
+      "ranked": [
+        "diet",
+        "allergy",
+        "tea",
+        "dog"
+      ],
+      "rank": 2,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "What industry is my company in?",
+      "expects": "job",
+      "type": "direct",
+      "answer_any": [
+        "logistics"
+      ],
+      "ranked": [
+        "job"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "What do I do for a living?",
+      "expects": "job",
+      "type": "paraphrase",
+      "answer_any": [
+        "data engineer"
+      ],
+      "ranked": [
+        "city",
+        "sister"
+      ],
+      "rank": null,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "When is my birthday?",
+      "expects": "birthday",
+      "type": "direct",
+      "answer_any": [
+        "march 14"
+      ],
+      "ranked": [
+        "birthday",
+        "sister"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "What day was I born?",
+      "expects": "birthday",
+      "type": "paraphrase",
+      "answer_any": [
+        "march 14"
+      ],
+      "ranked": [
+        "birthday"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "What year is my Honda?",
+      "expects": "car",
+      "type": "direct",
+      "answer_any": [
+        "2019"
+      ],
+      "ranked": [
+        "car"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "What vehicle do I own?",
+      "expects": "car",
+      "type": "paraphrase",
+      "answer_any": [
+        "civic"
+      ],
+      "ranked": [
+        "car"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "Which days do I work out?",
+      "expects": "gym",
+      "type": "paraphrase",
+      "answer_any": [
+        "monday"
+      ],
+      "ranked": [
+        "job",
+        "birthday",
+        "standup"
+      ],
+      "rank": null,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "How am I learning Spanish?",
+      "expects": "language",
+      "type": "direct",
+      "answer_any": [
+        "duolingo"
+      ],
+      "ranked": [
+        "language"
+      ],
+      "rank": 1,
+      "in_profile": false,
+      "hit": true
+    },
+    {
+      "q": "Which state is my home in?",
+      "expects": "city",
+      "type": "paraphrase",
+      "answer_any": [
+        "texas"
+      ],
+      "ranked": [
+        "city",
+        "dog"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "Can I order a steak for dinner?",
+      "expects": "diet",
+      "type": "paraphrase",
+      "answer_any": [
+        "vegetarian"
+      ],
+      "ranked": [
+        "diet",
+        "anniversary"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "Who is my favorite band?",
+      "expects": "music",
+      "type": "direct",
+      "answer_any": [
+        "radiohead"
+      ],
+      "ranked": [
+        "music"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "What time is my standup?",
+      "expects": "standup",
+      "type": "direct",
+      "answer_any": [
+        "9:30"
+      ],
+      "ranked": [
+        "standup"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "When did I get married?",
+      "expects": "anniversary",
+      "type": "paraphrase",
+      "answer_any": [
+        "june 2"
+      ],
+      "ranked": [
+        "anniversary"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "What novel am I in the middle of?",
+      "expects": "book",
+      "type": "paraphrase",
+      "answer_any": [
+        "hail mary"
+      ],
+      "ranked": [
+        "book"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "Which gym do I go to?",
+      "expects": "gym_new",
+      "stale": "gym_old",
+      "type": "updated",
+      "answer_any": [
+        "peak fitness"
+      ],
+      "ranked": [
+        "gym_new",
+        "gym"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "Where do I work out these days?",
+      "expects": "gym_new",
+      "stale": "gym_old",
+      "type": "updated",
+      "answer_any": [
+        "peak fitness"
+      ],
+      "ranked": [
+        "job",
+        "birthday",
+        "standup"
+      ],
+      "rank": null,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "What phone do I have?",
+      "expects": "phone_new",
+      "stale": "phone_old",
+      "type": "updated",
+      "answer_any": [
+        "pixel"
+      ],
+      "ranked": [
+        "phone_new"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "What's my current weight?",
+      "expects": "w3",
+      "rank1": true,
+      "type": "series",
+      "answer_any": [
+        "82.2"
+      ],
+      "ranked": [
+        "book",
+        "w3",
+        "w2",
+        "w1",
+        "gym_new"
+      ],
+      "rank": 2,
+      "in_profile": false,
+      "hit": false
+    },
+    {
+      "q": "How much weight have I lost since August?",
+      "expects": "w1",
+      "type": "series",
+      "answer_any": [
+        "1.8"
+      ],
+      "ranked": [
+        "w3",
+        "w2",
+        "w1",
+        "gym_new",
+        "gym"
+      ],
+      "rank": 3,
+      "in_profile": false,
+      "hit": true
+    },
+    {
+      "q": "When is it going to rain?",
+      "expects": "city",
+      "type": "profile",
+      "answer_any": [
+        "austin"
+      ],
+      "ranked": [],
+      "rank": null,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "Find me a good coffee shop nearby.",
+      "expects": "city",
+      "type": "profile",
+      "answer_any": [
+        "austin"
+      ],
+      "ranked": [
+        "city",
+        "tea"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    },
+    {
+      "q": "What should I make for dinner tonight?",
+      "expects": "diet",
+      "type": "profile",
+      "answer_any": [
+        "vegetarian",
+        "meatless",
+        "plant-based"
+      ],
+      "ranked": [
+        "diet",
+        "anniversary"
+      ],
+      "rank": 1,
+      "in_profile": true,
+      "hit": true
+    }
+  ]
+}

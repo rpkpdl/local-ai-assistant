@@ -1,0 +1,1574 @@
+{
+  "eval": "memory_write",
+  "model": "claude-haiku-5-5",
+  "librarian_model": "claude-haiku-5-5",
+  "date": "2026-10-14",
+  "cost": 0.012,
+  "summary": {
+    "skip": {
+      "decision": "9/9",
+      "items": "9/9",
+      "fields": "9/9",
+      "clean": "9/9"
+    },
+    "fact": {
+      "decision": "8/8",
+      "items": "8/8",
+      "fields": "8/8",
+      "clean": "7/8"
+    },
+    "lesson": {
+      "decision": "5/5",
+      "items": "5/5",
+      "fields": "5/5",
+      "clean": "5/5"
+    },
+    "series": {
+      "decision": "4/4",
+      "items": "4/4",
+      "fields": "3/4",
+      "clean": "4/4"
+    },
+    "relationship": {
+      "decision": "3/3",
+      "items": "3/3",
+      "fields": "3/3",
+      "clean": "2/3"
+    },
+    "correction": {
+      "decision": "4/4",
+      "items": "4/4",
+      "fields": "4/4",
+      "clean": "3/4"
+    },
+    "personal": {
+      "decision": "1/1",
+      "items": "1/1",
+      "fields": "1/1",
+      "clean": "1/1"
+    },
+    "all": {
+      "decision": "34/34",
+      "items": "34/34",
+      "fields": "33/34",
+      "clean": "31/34"
+    }
+  },
+  "rows": [
+    {
+      "id": "skip_thanks",
+      "category": "skip",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [],
+      "cost": 0.00026
+    },
+    {
+      "id": "skip_math",
+      "category": "skip",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [],
+      "cost": 0.00026
+    },
+    {
+      "id": "skip_currency",
+      "category": "skip",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [],
+      "cost": 0.00026
+    },
+    {
+      "id": "skip_haiku",
+      "category": "skip",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [],
+      "cost": 0.00027
+    },
+    {
+      "id": "skip_trivia",
+      "category": "skip",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [],
+      "cost": 0.00026
+    },
+    {
+      "id": "skip_hypothetical",
+      "category": "skip",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [],
+      "cost": 0.00027
+    },
+    {
+      "id": "skip_secret",
+      "category": "skip",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [],
+      "cost": 0.00027
+    },
+    {
+      "id": "skip_known",
+      "category": "skip",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [],
+      "cost": 0.00027
+    },
+    {
+      "id": "skip_lol",
+      "category": "skip",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [],
+      "cost": 0.00026
+    },
+    {
+      "id": "fact_diet",
+      "category": "fact",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "fact",
+          "attribute": "diet",
+          "content": "User is vegetarian and wants no meat suggestions.",
+          "value": "vegetarian",
+          "theme": [
+            "food",
+            "health"
+          ],
+          "keywords": [
+            "vegetarian",
+            "meat",
+            "steak",
+            "chicken",
+            "fish",
+            "dinner",
+            "recipe",
+            "restaurant",
+            "meal",
+            "eat",
+            "food",
+            "suggestion",
+            "menu",
+            "lunch"
+          ],
+          "salience": 0.7,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": null,
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00036
+    },
+    {
+      "id": "fact_job",
+      "category": "fact",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "fact",
+          "attribute": "job",
+          "content": "User started a new job as a nurse at a children's hospital.",
+          "value": "nurse at a children's hospital",
+          "theme": [
+            "work",
+            "health"
+          ],
+          "keywords": [
+            "nurse",
+            "nursing",
+            "hospital",
+            "children's hospital",
+            "pediatric",
+            "pediatrics",
+            "job",
+            "new job",
+            "career",
+            "work",
+            "shift",
+            "patients",
+            "healthcare",
+            "medical",
+            "employer"
+          ],
+          "salience": 0.7,
+          "provenance": "stated",
+          "mode": "task",
+          "occurred_at": "2026-10-14",
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00037
+    },
+    {
+      "id": "fact_birthday",
+      "category": "fact",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "fact",
+          "attribute": "birthday",
+          "content": "User's birthday is November 3rd.",
+          "value": "11-03",
+          "theme": [
+            "personal",
+            "birthday"
+          ],
+          "keywords": [
+            "birthday",
+            "november",
+            "november 3",
+            "nov 3",
+            "born",
+            "birth date",
+            "age",
+            "turning",
+            "celebrate",
+            "party",
+            "gift",
+            "cake",
+            "birthday party",
+            "date of birth"
+          ],
+          "salience": 0.7,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": null,
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00036
+    },
+    {
+      "id": "fact_allergy",
+      "category": "fact",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "fact",
+          "attribute": "allergy",
+          "content": "User is allergic to shellfish.",
+          "value": "shellfish",
+          "theme": [
+            "health",
+            "food"
+          ],
+          "keywords": [
+            "shellfish",
+            "allergy",
+            "allergic",
+            "recipe",
+            "recipes",
+            "cooking",
+            "seafood",
+            "shrimp",
+            "crab",
+            "lobster",
+            "prawns",
+            "clams",
+            "mussels",
+            "oysters",
+            "scallops",
+            "dinner",
+            "meal",
+            "restaurant",
+            "eat"
+          ],
+          "salience": 0.9,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": null,
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00037
+    },
+    {
+      "id": "fact_explicit",
+      "category": "fact",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "fact",
+          "attribute": null,
+          "content": "User prefers window seats on flights.",
+          "value": null,
+          "theme": [
+            "travel"
+          ],
+          "keywords": [
+            "window seat",
+            "window",
+            "flight",
+            "flights",
+            "flying",
+            "fly",
+            "plane",
+            "airplane",
+            "airline",
+            "airport",
+            "seat",
+            "seating",
+            "aisle",
+            "trip",
+            "travel",
+            "boarding",
+            "booking"
+          ],
+          "salience": 0.7,
+          "provenance": "stated",
+          "mode": "task",
+          "occurred_at": null,
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00035
+    },
+    {
+      "id": "fact_in_task",
+      "category": "fact",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "event",
+          "attribute": null,
+          "content": "User and their partner are expecting their first baby in March 2026.",
+          "value": null,
+          "theme": [
+            "family",
+            "pregnancy"
+          ],
+          "keywords": [
+            "baby",
+            "pregnancy",
+            "expecting",
+            "first child",
+            "newborn",
+            "march",
+            "due date",
+            "stroller",
+            "nursery",
+            "parenting",
+            "infant",
+            "partner",
+            "kids",
+            "birth"
+          ],
+          "salience": 0.7,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": "2026-03-01",
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00036
+    },
+    {
+      "id": "fact_addition",
+      "category": "fact",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "fact",
+          "attribute": null,
+          "content": "User really loves kayaking.",
+          "value": null,
+          "theme": [
+            "fitness",
+            "hobbies"
+          ],
+          "keywords": [
+            "kayak",
+            "kayaking",
+            "paddling",
+            "paddle",
+            "water",
+            "lake",
+            "river",
+            "canoe",
+            "outdoors",
+            "outdoor activities",
+            "boat",
+            "boating",
+            "summer",
+            "weekend",
+            "hobby",
+            "recreation",
+            "sport"
+          ],
+          "salience": 0.65,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": null,
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00036
+    },
+    {
+      "id": "lesson_flight",
+      "category": "lesson",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "lesson",
+          "attribute": null,
+          "content": "User's flight was delayed 5 hours and they were starving with no snacks available at the airport.",
+          "value": null,
+          "theme": [
+            "travel",
+            "food"
+          ],
+          "keywords": [
+            "flight",
+            "delayed",
+            "delay",
+            "snacks",
+            "snack",
+            "starving",
+            "hungry",
+            "airport",
+            "layover",
+            "plane",
+            "flying",
+            "fly",
+            "trip",
+            "red-eye",
+            "food",
+            "hunger",
+            "terminal",
+            "gate",
+            "airline"
+          ],
+          "salience": 0.9,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": "2026-10-14",
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00038
+    },
+    {
+      "id": "lesson_bus",
+      "category": "lesson",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "lesson",
+          "attribute": null,
+          "content": "User took an overnight bus to the coast and could not sleep at all, and said they will never do that again.",
+          "value": null,
+          "theme": [
+            "travel",
+            "sleep"
+          ],
+          "keywords": [
+            "overnight bus",
+            "bus",
+            "coach",
+            "coast",
+            "coastal trip",
+            "sleep",
+            "sleeping",
+            "insomnia",
+            "night travel",
+            "overnight",
+            "train",
+            "daytime train",
+            "trip",
+            "journey",
+            "tired",
+            "rest",
+            "red-eye",
+            "seaside",
+            "beach",
+            "transport"
+          ],
+          "salience": 0.9,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": null,
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00038
+    },
+    {
+      "id": "lesson_sushi",
+      "category": "lesson",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "lesson",
+          "attribute": null,
+          "content": "User got food poisoning from Sakura Sushi on 5th Street and said they will never go back.",
+          "value": null,
+          "theme": [
+            "food",
+            "health",
+            "restaurant"
+          ],
+          "keywords": [
+            "sakura sushi",
+            "sushi",
+            "5th street",
+            "food poisoning",
+            "poisoning",
+            "sick",
+            "stomach",
+            "restaurant",
+            "dinner",
+            "lunch",
+            "eat out",
+            "takeout",
+            "japanese",
+            "avoid",
+            "never again",
+            "nausea",
+            "vomiting",
+            "food safety"
+          ],
+          "salience": 0.9,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": null,
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00038
+    },
+    {
+      "id": "lesson_charger",
+      "category": "lesson",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "lesson",
+          "attribute": null,
+          "content": "User forgot their laptop charger on a work trip and the laptop died right before a presentation, which was very stressful.",
+          "value": null,
+          "theme": [
+            "travel",
+            "work",
+            "packing"
+          ],
+          "keywords": [
+            "laptop",
+            "charger",
+            "forgot",
+            "packing",
+            "trip",
+            "work trip",
+            "presentation",
+            "battery",
+            "died",
+            "power",
+            "adapter",
+            "cable",
+            "checklist",
+            "business travel",
+            "hotel",
+            "airport",
+            "stress"
+          ],
+          "salience": 0.9,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": null,
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00037
+    },
+    {
+      "id": "lesson_ibuprofen",
+      "category": "lesson",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "lesson",
+          "attribute": null,
+          "content": "User had a bad reaction to ibuprofen once and ended up in urgent care.",
+          "value": null,
+          "theme": [
+            "health",
+            "medication"
+          ],
+          "keywords": [
+            "ibuprofen",
+            "advil",
+            "motrin",
+            "nsaid",
+            "painkiller",
+            "pain reliever",
+            "reaction",
+            "allergy",
+            "urgent care",
+            "medicine",
+            "medication",
+            "headache",
+            "fever",
+            "pain",
+            "pills",
+            "drug",
+            "side effects",
+            "tablet",
+            "over the counter",
+            "sensitivity"
+          ],
+          "salience": 0.95,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": null,
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00038
+    },
+    {
+      "id": "series_first",
+      "category": "series",
+      "decision": true,
+      "items": true,
+      "fields": false,
+      "clean": true,
+      "field_fails": [
+        "value"
+      ],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "series_point",
+          "attribute": "weight",
+          "content": "User weighed 82.4 kg on 2026-10-14.",
+          "value": "82.4 kg",
+          "theme": [
+            "health",
+            "fitness"
+          ],
+          "keywords": [
+            "weight",
+            "weigh",
+            "weighed",
+            "scale",
+            "kg",
+            "kilograms",
+            "body",
+            "weigh in",
+            "weigh-in",
+            "health",
+            "fitness",
+            "progress",
+            "tracking",
+            "bmi"
+          ],
+          "salience": 0.6,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": "2026-10-14",
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00037
+    },
+    {
+      "id": "series_next",
+      "category": "series",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "series_point",
+          "attribute": "weight",
+          "content": "User weighed 81.9 kg on 2026-10-14",
+          "value": "81.9",
+          "theme": [
+            "fitness",
+            "health"
+          ],
+          "keywords": [
+            "weight",
+            "weigh",
+            "weighed",
+            "kg",
+            "scale",
+            "weigh-in",
+            "body weight",
+            "progress",
+            "trend",
+            "fitness",
+            "health",
+            "diet",
+            "loss"
+          ],
+          "salience": 0.5,
+          "provenance": "stated",
+          "mode": "task",
+          "occurred_at": "2026-10-14",
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00037
+    },
+    {
+      "id": "series_sleep",
+      "category": "series",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "series_point",
+          "attribute": "sleep_hours",
+          "content": "User slept 5 hours last night.",
+          "value": "5",
+          "theme": [
+            "health",
+            "sleep"
+          ],
+          "keywords": [
+            "sleep",
+            "sleep_hours",
+            "slept",
+            "hours",
+            "tired",
+            "insomnia",
+            "rest",
+            "bed",
+            "bedtime",
+            "fatigue",
+            "nap",
+            "sleep_schedule",
+            "night"
+          ],
+          "salience": 0.4,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": "2026-10-13",
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00037
+    },
+    {
+      "id": "series_run",
+      "category": "series",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "series_point",
+          "attribute": "5k_time",
+          "content": "User ran a 5k in 27:30 on 2026-10-14, a new personal best.",
+          "value": "27:30",
+          "theme": [
+            "fitness",
+            "running"
+          ],
+          "keywords": [
+            "5k",
+            "running",
+            "run",
+            "race",
+            "personal best",
+            "pr",
+            "fitness",
+            "5k time",
+            "running time",
+            "morning run",
+            "jogging",
+            "marathon training",
+            "pace",
+            "best time",
+            "record"
+          ],
+          "salience": 0.8,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": "2026-10-14",
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00037
+    },
+    {
+      "id": "rel_sister",
+      "category": "relationship",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "relationship",
+          "entity_name": "Priya",
+          "entity_type": "person",
+          "kind": "fact",
+          "attribute": null,
+          "content": "User's sister Priya recently moved to Denver.",
+          "value": null,
+          "theme": [
+            "family",
+            "travel"
+          ],
+          "keywords": [
+            "priya",
+            "sister",
+            "denver",
+            "colorado",
+            "moved",
+            "move",
+            "relocation",
+            "city",
+            "family",
+            "visit",
+            "sibling",
+            "sister's new home"
+          ],
+          "salience": 0.7,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": "2026-10-14",
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": "sister"
+        },
+        {
+          "type": "memory",
+          "entity_name": "Priya",
+          "entity_type": "person",
+          "kind": "event",
+          "attribute": null,
+          "content": "Priya moved to Denver around 2026-10-14.",
+          "value": null,
+          "theme": [
+            "family",
+            "travel"
+          ],
+          "keywords": [
+            "priya",
+            "denver",
+            "colorado",
+            "moved",
+            "move",
+            "relocation",
+            "sister",
+            "city",
+            "visit",
+            "new home",
+            "family"
+          ],
+          "salience": 0.6,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": "2026-10-14",
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00045
+    },
+    {
+      "id": "rel_manager",
+      "category": "relationship",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "relationship",
+          "entity_name": "Tom",
+          "entity_type": "person",
+          "kind": "fact",
+          "attribute": null,
+          "content": "Tom is the user's manager and is strict about deadlines.",
+          "value": null,
+          "theme": [
+            "work"
+          ],
+          "keywords": [
+            "tom",
+            "manager",
+            "boss",
+            "deadline",
+            "deadlines",
+            "strict",
+            "work",
+            "office",
+            "supervisor",
+            "due date",
+            "project",
+            "schedule"
+          ],
+          "salience": 0.7,
+          "provenance": "stated",
+          "mode": "task",
+          "occurred_at": null,
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": "manager"
+        },
+        {
+          "type": "memory",
+          "entity_name": "Tom",
+          "entity_type": "person",
+          "kind": "fact",
+          "attribute": null,
+          "content": "Tom is strict about deadlines.",
+          "value": null,
+          "theme": [
+            "work"
+          ],
+          "keywords": [
+            "tom",
+            "deadline",
+            "deadlines",
+            "strict",
+            "manager",
+            "boss",
+            "work",
+            "due date",
+            "late",
+            "schedule",
+            "project",
+            "timeline"
+          ],
+          "salience": 0.7,
+          "provenance": "stated",
+          "mode": "task",
+          "occurred_at": null,
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00044
+    },
+    {
+      "id": "rel_dog",
+      "category": "relationship",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": false,
+      "field_fails": [],
+      "extras": 1,
+      "produced": [
+        {
+          "type": "relationship",
+          "entity_name": "Pepper",
+          "entity_type": "pet",
+          "kind": "fact",
+          "attribute": null,
+          "content": "User's dog Pepper turns 3 years old next week.",
+          "value": null,
+          "theme": [
+            "pets",
+            "family"
+          ],
+          "keywords": [
+            "pepper",
+            "dog",
+            "pet",
+            "birthday",
+            "turns 3",
+            "third birthday",
+            "age",
+            "party",
+            "celebrate",
+            "puppy",
+            "next week",
+            "2026-10-21"
+          ],
+          "salience": 0.7,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": "2026-10-21",
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": "dog"
+        },
+        {
+          "type": "memory",
+          "entity_name": "Pepper",
+          "entity_type": "pet",
+          "kind": "event",
+          "attribute": "birthday",
+          "content": "Pepper, the user's dog, turns 3 years old on or around 2026-10-21.",
+          "value": null,
+          "theme": [
+            "pets",
+            "family"
+          ],
+          "keywords": [
+            "pepper",
+            "dog",
+            "pet",
+            "birthday",
+            "third birthday",
+            "turns 3",
+            "celebrate",
+            "party",
+            "treat",
+            "gift",
+            "age",
+            "2026-10-21"
+          ],
+          "salience": 0.7,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": "2026-10-21",
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00047
+    },
+    {
+      "id": "fix_moved",
+      "category": "correction",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "fact",
+          "attribute": "home_city",
+          "content": "User moved to Denver, Colorado in September 2026, replacing Austin, Texas as their home city.",
+          "value": "Denver, Colorado",
+          "theme": [
+            "home",
+            "travel"
+          ],
+          "keywords": [
+            "denver",
+            "colorado",
+            "moved",
+            "move",
+            "home",
+            "city",
+            "live",
+            "location",
+            "austin",
+            "texas",
+            "relocation",
+            "weather",
+            "rocky mountains",
+            "neighborhood",
+            "local"
+          ],
+          "salience": 0.8,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": "2026-09-01",
+          "supersedes": 1,
+          "supersede_reason": "moved",
+          "link_type": null
+        }
+      ],
+      "cost": 0.00037
+    },
+    {
+      "id": "fix_job",
+      "category": "correction",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "fact",
+          "attribute": "job",
+          "content": "User switched from data engineer to product management in spring 2026.",
+          "value": "product management",
+          "theme": [
+            "work",
+            "career"
+          ],
+          "keywords": [
+            "job",
+            "career",
+            "product management",
+            "product manager",
+            "data engineer",
+            "switched",
+            "work",
+            "role",
+            "spring",
+            "employer",
+            "pm",
+            "profession",
+            "occupation"
+          ],
+          "salience": 0.9,
+          "provenance": "stated",
+          "mode": "task",
+          "occurred_at": "2026-03-01",
+          "supersedes": 1,
+          "supersede_reason": "outdated",
+          "link_type": null
+        }
+      ],
+      "cost": 0.00036
+    },
+    {
+      "id": "fix_coffee",
+      "category": "correction",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "fact",
+          "attribute": "morning_drink",
+          "content": "User quit coffee and now only drinks green tea.",
+          "value": "green tea",
+          "theme": [
+            "food",
+            "health"
+          ],
+          "keywords": [
+            "coffee",
+            "green tea",
+            "tea",
+            "caffeine",
+            "morning",
+            "drink",
+            "beverage",
+            "quit",
+            "caffeine habit",
+            "breakfast",
+            "morning routine"
+          ],
+          "salience": 0.7,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": "2026-10-14",
+          "supersedes": 1,
+          "supersede_reason": "outdated",
+          "link_type": null
+        }
+      ],
+      "cost": 0.00036
+    },
+    {
+      "id": "fix_assistant_error",
+      "category": "correction",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": false,
+      "field_fails": [],
+      "extras": 1,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "fact",
+          "attribute": null,
+          "content": "User's sister Maya lives in Portland, not Seattle.",
+          "value": null,
+          "theme": [
+            "family",
+            "travel"
+          ],
+          "keywords": [
+            "maya",
+            "sister",
+            "portland",
+            "seattle",
+            "lives",
+            "live",
+            "location",
+            "city",
+            "oregon",
+            "family",
+            "where",
+            "correction",
+            "moved"
+          ],
+          "salience": 0.9,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": null,
+          "supersedes": 1,
+          "supersede_reason": "wrong",
+          "link_type": null
+        },
+        {
+          "type": "relationship",
+          "entity_name": "Maya",
+          "entity_type": "person",
+          "kind": "fact",
+          "attribute": null,
+          "content": "Maya is the user's sister.",
+          "value": null,
+          "theme": [
+            "family"
+          ],
+          "keywords": [
+            "maya",
+            "sister",
+            "family",
+            "sibling",
+            "portland"
+          ],
+          "salience": 0.7,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": null,
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": "sister"
+        }
+      ],
+      "cost": 0.00043
+    },
+    {
+      "id": "personal_lonely",
+      "category": "personal",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": true,
+      "field_fails": [],
+      "extras": 0,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "lesson",
+          "attribute": null,
+          "content": "User has been feeling really lonely since their move.",
+          "value": null,
+          "theme": [
+            "emotion",
+            "home",
+            "relationships"
+          ],
+          "keywords": [
+            "lonely",
+            "loneliness",
+            "move",
+            "moved",
+            "moving",
+            "new city",
+            "isolated",
+            "friends",
+            "social",
+            "support",
+            "homesick",
+            "alone",
+            "people",
+            "community",
+            "relocation"
+          ],
+          "salience": 0.85,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": null,
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        }
+      ],
+      "cost": 0.00036
+    },
+    {
+      "id": "event_trip",
+      "category": "fact",
+      "decision": true,
+      "items": true,
+      "fields": true,
+      "clean": false,
+      "field_fails": [],
+      "extras": 1,
+      "produced": [
+        {
+          "type": "memory",
+          "entity_name": "user",
+          "entity_type": "user",
+          "kind": "event",
+          "attribute": null,
+          "content": "User is flying to Lisbon on 2026-11-12 for their cousin's wedding.",
+          "value": null,
+          "theme": [
+            "travel",
+            "family"
+          ],
+          "keywords": [
+            "lisbon",
+            "portugal",
+            "flight",
+            "flying",
+            "trip",
+            "wedding",
+            "cousin",
+            "november",
+            "travel",
+            "airport",
+            "plane",
+            "fly",
+            "hotel",
+            "visit",
+            "celebration"
+          ],
+          "salience": 0.7,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": "2026-11-12",
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": null
+        },
+        {
+          "type": "relationship",
+          "entity_name": "cousin",
+          "entity_type": "person",
+          "kind": "fact",
+          "attribute": null,
+          "content": "User's cousin is getting married in Lisbon.",
+          "value": null,
+          "theme": [
+            "family"
+          ],
+          "keywords": [
+            "cousin",
+            "wedding",
+            "lisbon",
+            "marriage",
+            "family"
+          ],
+          "salience": 0.6,
+          "provenance": "stated",
+          "mode": "personal",
+          "occurred_at": null,
+          "supersedes": null,
+          "supersede_reason": null,
+          "link_type": "cousin"
+        }
+      ],
+      "cost": 0.00045
+    }
+  ]
+}

@@ -8,7 +8,8 @@ Checks:
   1. Files that must never be committed (.env, databases, traces, local notes).
   2. Secret patterns: API keys, tokens, private keys.
   3. Personal terms listed in .private-terms (gitignored, one term per line, # for comments).
-  4. Real memories: the text of every memory in memories.db, if the file exists.
+  4. Real memories: the text of every memory in memories.db, and the names of the people,
+     pets and places they're about, if the file exists.
 
 Checks 3 and 4 only run where those local files exist, so CI checks 1 and 2.
 Standard library only, so it runs without the project's virtualenv.
@@ -16,6 +17,7 @@ Standard library only, so it runs without the project's virtualenv.
 
 from __future__ import annotations
 
+import json
 import re
 import sqlite3
 import subprocess
@@ -84,6 +86,15 @@ def private_patterns() -> dict[str, re.Pattern]:
             text = " ".join(content.split())
             if len(text) >= 12:
                 patterns[f"text of memory {mid}"] = re.compile(re.escape(text), re.I)
+        try:  # names of people, pets and places the memories are about
+            names = db.execute("SELECT id, name, aliases FROM entities WHERE type != 'user'")
+            for eid, name, aliases in names.fetchall():
+                for n in [name, *json.loads(aliases or "[]")]:
+                    if len(n.strip()) >= 3:
+                        patterns[f"name of entity {eid}"] = re.compile(
+                            rf"(?<!\w){re.escape(n.strip())}(?!\w)", re.I)
+        except (sqlite3.Error, ValueError):
+            pass  # databases from before the entities table
     return patterns
 
 

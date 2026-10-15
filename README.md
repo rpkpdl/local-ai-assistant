@@ -13,8 +13,14 @@ through Ollama.
 
 ## Features
 
-- **Long-term memory:** `remember` / `recall` / `forget` tools backed by SQLite FTS5 full-text
-  search with bm25 ranking. The model decides what's worth keeping.
+- **Long-term memory:** after each turn a "librarian" LLM call decides what's worth keeping
+  (usually nothing) and stores it as facts, events, lessons, measurements over time, or people.
+  Each memory gets a salience, a provenance and retrieval keywords, and corrections supersede
+  the old version instead of erasing it. Core facts (home city, diet, people) are always in
+  context. Everything else is found with `recall` (SQLite FTS5, ranked by bm25 × salience ×
+  recency). Lived experiences that match what the user says are offered to the agent, so it
+  can say "last time your flight was delayed you were starving, want to pack snacks?". See
+  [docs/memory.md](docs/memory.md).
 - **Web lookups that improve over time:** the agent checks its saved sources first, then searches
   (Brave Search API), fetches, and saves good URLs as reusable templates
   (e.g. `https://api.example.com/weather?lat={lat}&lon={lon}`). Next time it skips the search.
@@ -25,8 +31,9 @@ through Ollama.
   showing live tool activity, token usage, cost per turn and per chat, memories and sources.
 - **Terminal mode:** the same agent as a REPL.
 - **Observability:** optional [Arize Phoenix](https://github.com/Arize-ai/phoenix) tracing via
-  OpenInference. Every LLM call, tool call and SQLite query shows up as a span.
-- **Cost tracking:** computed per API call, split into agent and judge spend.
+  OpenInference. Every LLM call, tool call and SQLite query shows up as a span, with cost. Eval
+  runs are traced too, in their own Phoenix project.
+- **Cost tracking:** computed per API call, split into agent, judge and memory spend.
 - **Local model option:** run the agent on Ollama (e.g. Gemma) with the same code path.
 
 ## Architecture
@@ -41,14 +48,14 @@ through Ollama.
                                                  │
         ┌───────────────────┬───────────────────┼────────────────────┐
         ▼                   ▼                   ▼                    ▼
-  Memory tools        find_sources         web_search          http_get
-  (memory.py)         save_source          (web/search.py,     (web/fetch.py,
-  SQLite FTS5         (web/sources.py)     Brave API +         SSRF guard,
-                           │               monthly quota)      page cache,
-                           ▼                                   audit log)
-                    SourceJudge
-                    (judge.py,
-                 tool-less LLM check)
+  recall / forget     find_sources         web_search          http_get
+  + profile           save_source          (web/search.py,     (web/fetch.py,
+  + associations      (web/sources.py)     Brave API +         SSRF guard,
+  (memory/store.py)        │               monthly quota)      page cache,
+        ▲                  ▼                                   audit log)
+  Librarian           SourceJudge
+  (memory/librarian.py,  (judge.py,
+   after each turn)   tool-less LLM check)
 
                All state ──▶ memories.db (SQLite)    Traces ──▶ Phoenix (optional)
 ```
@@ -56,7 +63,10 @@ through Ollama.
 ```text
 assistant/              the application package
 ├── agent.py            agent loop, system prompt, memory tools, model and pricing config
-├── memory.py           MemoryStore interface: SQLite (FTS5) and JSON implementations
+├── memory/             long-term memory
+│   ├── store.py        SQLite tables, FTS5 search, profile, associative gate, migration
+│   ├── librarian.py    LLM call after each turn: what to store, supersede, keywords
+│   └── consolidate.py  daily salience upkeep (reinforce / decay)
 ├── judge.py            independent approve/reject check for new sources
 ├── tracing.py          Phoenix / OpenInference setup, traced SQLite connection
 ├── server.py           FastAPI app: streaming chat, memories and sources endpoints
@@ -67,10 +77,11 @@ assistant/              the application package
     ├── fetch.py        SSRF-guarded fetcher, page cache, audit log
     ├── search.py       Brave Search client with a monthly quota
     └── sources.py      saved URL templates per task
-tests/                  offline pytest suite (security guards, server, memory)
+tests/                  offline pytest suite (security guards, server, memory, librarian)
 evals/                  scored evals with datasets and saved results
 scripts/run_phoenix.sh  local Phoenix trace UI
 docs/database.md        every table in the database, with example queries
+docs/memory.md          how memory works and why
 Dockerfile, docker-compose.yml
 ```
 
@@ -197,14 +208,19 @@ Tests check correctness. [Evals](evals/) measure behavior, with scores tracked o
 
 | Eval | What it measures | Latest result |
 |---|---|---|
-| Memory recall (retrieval) | Does memory search find the right fact? 22 questions, 12 of them paraphrased | 10/10 direct, **0/12 paraphrased** |
+| Memory recall (retrieval) | Does memory search find the right fact? 30 questions: paraphrased, updated, time series, implied | paraphrases: 1/12 plain, **10/12** with the librarian's keywords (search alone) |
+| Memory recall (agent) | Does the agent answer correctly? | Opus 27/27 answered (3 not run), Gemma 4 28/30 |
+| Librarian | Does it store the right things (and nothing for small talk, trivia or a PIN)? 34 turns | Opus **34/34**, Haiku 34/34 at 1/40th the cost |
+| Associative recall | Does the agent bring up a relevant past experience, and stay quiet otherwise? 21 messages | Opus **11/11** brought up, 7/10 stayed quiet |
 | Source judge | Approve good APIs, reject junk pages and 5 prompt-injection attempts | **11/11**, including all 5 injections |
 
-The 0/12 is the known weakness of keyword search, now measured. It's the baseline for the
-vector search on the roadmap.
+Keyword search alone misses paraphrases. Having the librarian write retrieval keywords once,
+when it stores a memory, fixed most of that without vector search. Details and caveats are in
+[evals/README.md](evals/README.md).
 
 ```bash
 .venv/bin/python evals/run_eval.py memory --mode retrieval   # free
+.venv/bin/python evals/run_eval.py write                     # librarian, ~$0.47
 .venv/bin/python evals/run_eval.py judge                     # ~$0.05
 ```
 
@@ -216,8 +232,10 @@ memory when Claude did.
 
 ## Known limitations
 
-- `recall` is keyword search, so it misses paraphrases ("what do I like to drink" won't find a
-  memory about tea).
+- `recall` is keyword search. It finds paraphrases only through the keywords the librarian wrote,
+  so memories stored before the librarian existed need a one-time
+  `python -m assistant.memory.consolidate --enrich`.
+- The librarian adds one Claude call per turn, after the reply has streamed.
 - Conversation history is kept in memory and is lost on restart. Memories persist.
 - Prompt caching isn't used yet.
 - Only reachable from the machine it runs on.
@@ -228,7 +246,7 @@ memory when Claude did.
    conversations and prompt caching.
 2. **Voice:** speech-to-text with local Whisper, text-to-speech, then a hands-free mode. Store
    transcripts, not audio.
-3. **Better recall:** hybrid keyword + vector search (fastembed + sqlite-vec).
+3. **Better recall:** hybrid keyword + vector search (fastembed + sqlite-vec), if write-time
+   keywords stop being enough.
 4. **Multi-device sync:** UUID ids, timestamps and soft deletes.
-5. **More evals:** run the memory eval through the full agent on Claude and on local models, and
-   add cases for facts that change over time.
+5. **More evals:** a held-out recall set, and an end-to-end store-then-surface scenario.
