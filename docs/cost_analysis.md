@@ -1,7 +1,7 @@
 # Cost analysis
 
-What the assistant's LLM calls cost, measured on the eval sets, and why the author's deployment
-runs on Claude Haiku 5.5 instead of Opus 5.5. Every number below comes from a saved results file in
+What the assistant's LLM calls cost, measured on the eval sets, and why Claude Haiku 5.5 is the
+recommended model instead of Opus 5.5. Every number below comes from a saved results file in
 [`evals/results/`](../evals/results/). The decision is recorded in [findings.md](findings.md)
 ("Haiku 5.5 matches Opus 5.5 on every eval").
 
@@ -22,8 +22,8 @@ Each turn makes up to three kinds of LLM call:
 | Librarian | Once per turn, after the reply, to decide what to store | `LIBRARIAN_MODEL` |
 | Source judge | Only when the agent saves a new web source | `JUDGE_MODEL` |
 
-All three default to `claude-opus-5-5` in code. The author's deployment sets all three to
-`claude-haiku-5-5` in `.env`.
+All three default to `claude-opus-5-5` in code. The measurements below compare that default with
+all three set to `claude-haiku-5-5` in `.env`, which is the recommended setup.
 
 ## Prices
 

@@ -62,14 +62,14 @@ Haiku cost $0.00054. Per-call costs, prices and monthly estimates are in
 yes/no verdict. A smaller model handles them, and the evals are small (21-34 cases), so a gap
 of one case is noise.
 
-**Decision / next step:** The agent, librarian and judge all run on Haiku in the author's
-deployment (`.env`). The code default stays Opus. Watch real turns in Phoenix for multi-step web tasks,
+**Decision / next step:** Recommend Haiku for the agent, librarian and judge: three `.env`
+settings. The code default stays Opus. Watch real turns in Phoenix for multi-step web tasks,
 which the evals don't cover. Switching also turned up a bug: `JUDGE_MODEL` and
 `LIBRARIAN_MODEL` were read before `.env` was loaded, so they silently stayed on Opus. `.env` now
 loads when the package is imported, and a test covers it.
 
-**Status:** Shipped in `571c317`: Haiku is the default in the author's deployment, and the code default is
-unchanged. The `.env` loading bug is fixed in the same commit, with a regression test.
+**Status:** Shipped in `571c317`: the three model settings exist, and Haiku is the recommended
+setup. The code default is unchanged. The `.env` loading bug is fixed in the same commit, with a regression test.
 
 ---
 
