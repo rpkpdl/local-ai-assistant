@@ -32,7 +32,7 @@ Examples use generic or synthetic details, never the real contents of the memory
 | Date | Finding | Status |
 |---|---|---|
 | 2026-10-17 | Haiku 5.5 matches Opus 5.5 on every eval | Shipped, `1d7b91b` |
-| 2026-10-14 | Eval rows that errored were scored as misses | Fixed ("Score errored eval rows separately") |
+| 2026-10-14 | Eval rows that errored were scored as misses | Fixed, `4c17978` |
 | 2026-10-14 | Eval spend wasn't in Phoenix, and traces split across threads | Fixed, `85debc3` |
 | 2026-10-14 | Write-time keywords fix paraphrase recall without vectors | Shipped, `85debc3` |
 | 2026-10-14 | The association gate doesn't control the agent's own searches | Open |
@@ -87,7 +87,7 @@ counts them as 0/3 for `profile`.
 left out of the score, and a warning at the end of any run that had them. Associative-recall
 agent runs now record errors too.
 
-**Status:** Fixed in the commit "Score errored eval rows separately". The same results file now
+**Status:** Fixed in `4c17978`. The same results file now
 summarizes as 27/27 answered with 3 errors, instead of 27/30. Results files saved before the fix
 keep their old summaries; their rows have the `error` field.
 
