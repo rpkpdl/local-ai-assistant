@@ -32,12 +32,12 @@ Examples use generic or synthetic details, never the real contents of the memory
 
 | Date | Finding | Status |
 |---|---|---|
-| 2026-10-17 | Haiku 5.5 matches Opus 5.5 on every eval | Shipped, `1d7b91b` |
-| 2026-10-14 | Eval rows that errored were scored as misses | Fixed, `4c17978` |
-| 2026-10-14 | Eval spend wasn't in Phoenix, and traces split across threads | Fixed, `85debc3` |
-| 2026-10-14 | Write-time keywords fix paraphrase recall without vectors | Shipped, `85debc3` |
+| 2026-10-17 | Haiku 5.5 matches Opus 5.5 on every eval | Shipped, `571c317` |
+| 2026-10-14 | Eval rows that errored were scored as misses | Fixed, `4db387e` |
+| 2026-10-14 | Eval spend wasn't in Phoenix, and traces split across threads | Fixed, `a506f38` |
+| 2026-10-14 | Write-time keywords fix paraphrase recall without vectors | Shipped, `a506f38` |
 | 2026-10-14 | The association gate doesn't control the agent's own searches | Open |
-| 2026-10-13 | Local model skips memory recall | Fixed, `85debc3` |
+| 2026-10-13 | Local model skips memory recall | Fixed, `a506f38` |
 
 ---
 
@@ -68,7 +68,7 @@ which the evals don't cover. Switching also turned up a bug: `JUDGE_MODEL` and
 `LIBRARIAN_MODEL` were read before `.env` was loaded, so they silently stayed on Opus. `.env` now
 loads when the package is imported, and a test covers it.
 
-**Status:** Shipped in `1d7b91b`: Haiku is the default on this machine, and the code default is
+**Status:** Shipped in `571c317`: Haiku is the default on this machine, and the code default is
 unchanged. The `.env` loading bug is fixed in the same commit, with a regression test.
 
 ---
@@ -89,7 +89,7 @@ counts them as 0/3 for `profile`.
 left out of the score, and a warning at the end of any run that had them. Associative-recall
 agent runs now record errors too.
 
-**Status:** Fixed in `4c17978`. The same results file now
+**Status:** Fixed in `4db387e`. The same results file now
 summarizes as 27/27 answered with 3 errors, instead of 27/30. Results files saved before the fix
 keep their old summaries; their rows have the `error` field.
 
@@ -116,7 +116,7 @@ with one session per run and one trace per case. The turn thread runs in the cal
 context (`tracing.in_caller_context`). SQL spans are recorded only inside a turn or tool.
 Librarian calls nest under their turn.
 
-**Status:** Fixed in `85debc3`. Re-run: 2 cases → 2 traces in one session, with tokens on every
+**Status:** Fixed in `a506f38`. Re-run: 2 cases → 2 traces in one session, with tokens on every
 LLM span. Runs before this commit are only in the results files.
 
 ---
@@ -148,7 +148,7 @@ roadmap, unless a held-out question set (written without seeing the keywords) sc
 lower. Existing memories need `python -m assistant.memory.consolidate --enrich` once to get
 keywords.
 
-**Status:** Shipped in `85debc3`. Haiku 5.5 as the librarian gives the same recall (30/30
+**Status:** Shipped in `a506f38`. Haiku 5.5 as the librarian gives the same recall (30/30
 answered in agent mode). Results: [evals/README.md](../evals/README.md).
 
 ---
@@ -207,7 +207,7 @@ Vector search alone wouldn't fix this, because the local model never searched at
 - Add "When is it going to rain?" (expects the location memory) to the memory eval, and run
   agent mode on both models to measure the gap.
 
-**Status:** Fixed in `85debc3`. The profile holds user facts with an attribute, relationships and
+**Status:** Fixed in `a506f38`. The profile holds user facts with an attribute, relationships and
 tracked series, in its own system block. In the recall eval, gemma4:e4b answered all 3 profile
 questions from the stored city or diet without a tool call ("Since you live in Austin...").
 claude-haiku-5-5 also answered 3/3 (2026-10-17). The Opus run of those 3 hit the API credit
