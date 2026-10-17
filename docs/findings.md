@@ -17,7 +17,8 @@ Examples use generic or synthetic details, never the real contents of the memory
 3. **A gate only controls what you push.** An agent that searches on its own will find what the
    gate held back. Policy has to apply on both paths.
 4. **Measure before assuming you need the big model.** On these tasks Haiku 5.5 matched Opus 5.5
-   on every eval at 1/10 to 1/40 of the cost, including the prompt-injection check.
+   on every eval at 1/13 to 1/39 of the cost, including the prompt-injection check. The full
+   breakdown is in [cost_analysis.md](cost_analysis.md).
 5. **Check that the configuration you set is the one running.** Two model settings were silently
    ignored because they were read before `.env` loaded. Only checking the resolved values
    revealed it.
@@ -54,7 +55,8 @@ Examples use generic or synthetic details, never the real contents of the memory
 | Source judge, injections | 11/11, 5/5 · $0.05 | 11/11, 5/5 · $0.0013 |
 
 Haiku's injection rejections cite the manipulation itself, as Opus's do. A live short turn on
-Haiku cost $0.00054.
+Haiku cost $0.00054. Per-call costs, prices and monthly estimates are in
+[cost_analysis.md](cost_analysis.md).
 
 **Cause:** These tasks are short and well-specified: tool choice, structured extraction, and a
 yes/no verdict. A smaller model handles them, and the evals are small (21-34 cases), so a gap

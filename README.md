@@ -82,6 +82,7 @@ evals/                  scored evals with datasets and saved results
 scripts/run_phoenix.sh  local Phoenix trace UI
 docs/database.md        every table in the database, with example queries
 docs/memory.md          how memory works and why
+docs/cost_analysis.md   what each LLM call costs, Opus vs Haiku, measured on the evals
 Dockerfile, docker-compose.yml
 ```
 
@@ -213,6 +214,9 @@ Tests check correctness. [Evals](evals/) measure behavior, with scores tracked o
 | Librarian | Does it store the right things (and nothing for small talk, trivia or a PIN)? 34 turns | Opus **34/34**, Haiku 34/34 at 1/40th the cost |
 | Associative recall | Does the agent bring up a relevant past experience, and stay quiet otherwise? 21 messages | **11/11** brought up on Opus and Haiku; stayed quiet 7/10 (Opus), 8/10 (Haiku) |
 | Source judge | Approve good APIs, reject junk pages and 5 prompt-injection attempts | **11/11**, including all 5 injections, on Opus and Haiku |
+
+Running all of these on Haiku 5.5 instead of Opus 5.5 cost 23× less, with no measurable loss
+([cost analysis](docs/cost_analysis.md)).
 
 Keyword search alone misses paraphrases. Having the librarian write retrieval keywords once,
 when it stores a memory, fixed most of that without vector search. Details and caveats are in
