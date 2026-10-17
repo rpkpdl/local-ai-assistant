@@ -1,10 +1,10 @@
 """Terminal chat for the personal assistant. For the web UI, run assistant.server instead.
 
-Run:  python -m assistant.cli [--store sqlite|json] [--auto-recall] [--quiet]
+Run:  python -m assistant.cli [--auto-recall] [--quiet]
 
-Memory is exposed to Claude as three tools (remember / recall / forget).
-With --auto-recall, relevant memories are also retrieved up front and
-attached to each user message, so you can compare the two retrieval styles.
+Memory: core facts are always in context, `recall` / `forget` are tools, and a librarian
+stores what's worth keeping after each turn. With --auto-recall, the top keyword matches are
+also attached to each user message.
 
 Web access: find_sources -> web_search (Brave) -> http_get -> save_source.
 Known-good URLs are cached locally so repeat tasks skip the search.
@@ -21,16 +21,15 @@ from .agent import MODEL, Agent
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--store", choices=["sqlite", "json"], default="sqlite")
     parser.add_argument("--auto-recall", action="store_true",
                         help="attach top matching memories to every user message")
     parser.add_argument("--quiet", action="store_true", help="hide tool calls and usage")
     args = parser.parse_args()
 
-    agent = Agent(store_kind=args.store, auto_recall=args.auto_recall)
+    agent = Agent(auto_recall=args.auto_recall)
     if agent.search_error:
         print(f"Web search disabled: {agent.search_error}")
-    print(f"Personal assistant ({MODEL}, store={args.store}, auto_recall={args.auto_recall}, "
+    print(f"Personal assistant ({MODEL}, auto_recall={args.auto_recall}, "
           f"tracing={'on' if agent.tracing else 'off'})")
     print("Type /memories or /sources to inspect storage, /quit to exit.\n")
     verbose = not args.quiet
@@ -65,6 +64,8 @@ def main():
                 print(f"\n  [error] {ev['message']}")
             elif kind == "notice":
                 print(f"\n  [notice] {ev['text']}")
+            elif kind == "memory":
+                print(f"\n  [memory {ev['action']}] {ev['text']}")
             elif not verbose:
                 continue
             elif kind == "tool_start":
@@ -76,7 +77,7 @@ def main():
                 in_text = False
             elif kind == "done":
                 print(f"\n  [turn] agent ${ev['agent_cost']:.4f} + judge ${ev['judge_cost']:.4f}"
-                      f" = ${ev['cost']:.4f}, {ev['ms'] / 1000:.1f} s", end="")
+                      f" + memory ${ev['memory_cost']:.4f} = ${ev['cost']:.4f}, {ev['ms'] / 1000:.1f} s", end="")
         print("\n")
 
 

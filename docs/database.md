@@ -16,33 +16,97 @@ Tables are created automatically on first run by the module that owns them.
 
 | Table | Defined in | Purpose |
 |---|---|---|
-| [`memories`](#memories) | `assistant/memory.py` | Facts about the user (long-term memory) |
+| [`entities`, `memories`, `relationships`](#memory-tables) | `assistant/memory/store.py` | Long-term memory about the user |
 | [`sources`](#sources) | `assistant/web/sources.py` | Known-good URL templates for recurring tasks |
 | [`pages`](#pages) | `assistant/web/fetch.py` | Local cache of fetched page/API content |
 | [`fetch_log`](#fetch_log) | `assistant/web/fetch.py` | Audit log of every fetch attempt |
 | [`search_usage`](#search_usage) | `assistant/web/search.py` | Brave searches per month, for the quota cap |
 
-### `memories`
+### Memory tables
 
-Long-term facts about the user, written by the `remember` tool and searched by `recall`.
+Written by the librarian (`assistant/memory/librarian.py`) after each turn, and read by `recall`,
+the always-in-context profile and associative recall (`assistant/memory/store.py`). See
+[memory.md](memory.md) for how they're used.
+
+#### `entities`
+
+Everyone and everything memories are about. The user is the one row with `type = 'user'`.
+
+| Column | Type | Description |
+|---|---|---|
+| `id` | integer | Entity id |
+| `type` | text | `user`, `person`, `pet`, `place`, `org` or `thing` |
+| `name` | text | Display name, e.g. `Maya`. Unique per type; matched case-insensitively |
+| `aliases` | text | JSON array of other names that resolve to this entity |
+| `created_at` | real | When it was first seen |
+
+#### `memories`
 
 ```sql
-CREATE VIRTUAL TABLE memories USING fts5(id UNINDEXED, content, tags, created_at UNINDEXED)
+CREATE TABLE memories (
+    id INTEGER PRIMARY KEY, entity_id INTEGER NOT NULL REFERENCES entities(id),
+    kind TEXT NOT NULL, attribute TEXT, content TEXT NOT NULL, value TEXT,
+    theme TEXT NOT NULL DEFAULT '', keywords TEXT NOT NULL DEFAULT '',
+    salience REAL NOT NULL DEFAULT 0.5, provenance TEXT NOT NULL DEFAULT 'stated',
+    mode TEXT NOT NULL DEFAULT 'task', occurred_at TEXT, recorded_at REAL NOT NULL,
+    last_seen_at REAL, last_surfaced_at REAL, hit_count INTEGER NOT NULL DEFAULT 0,
+    superseded_by INTEGER REFERENCES memories(id), supersede_reason TEXT)
 ```
 
 | Column | Type | Description |
 |---|---|---|
-| `id` | text | 8-character hex id, shown by `recall` and used by `forget` |
-| `content` | text | The fact, written to make sense on its own. Full-text indexed |
-| `tags` | text | Space-separated topic tags, e.g. `preferences food`. Full-text indexed |
-| `created_at` | real | When it was saved |
+| `id` | integer | Memory id, shown to the model as `m12` |
+| `entity_id` | integer | Who or what it's about (`entities.id`) |
+| `kind` | text | `fact`, `event`, `series_point` (one measurement) or `lesson` (a lived experience) |
+| `attribute` | text | Slot name for facts with one current value (`home_city`, `diet`), or the series name (`weight`). User facts with an attribute form the profile |
+| `content` | text | The memory as one self-contained sentence |
+| `value` | text | Structured value, e.g. `82.4` for a series point |
+| `theme` | text | Comma-separated broad topics, e.g. `travel,flight,food` |
+| `keywords` | text | Comma-separated retrieval keys the librarian wrote: names from the content plus words the user might say later (`flying, airport, layover`) |
+| `salience` | real | 0 to 1, how much it matters. Ranks recall, gates association, adjusted by the consolidator |
+| `provenance` | text | `stated` (the user said it), `observed` or `inferred`. Inferred is capped at 0.4 |
+| `mode` | text | `task` or `personal` |
+| `occurred_at` | text | ISO date it happened, if known (the one timestamp that isn't epoch seconds, since it's often just a date) |
+| `recorded_at` | real | When it was stored |
+| `last_seen_at` | real | Last time it was recalled or surfaced |
+| `last_surfaced_at` | real | Last time associative recall offered it; it isn't offered again for 2 days |
+| `hit_count` | integer | How often it was recalled or surfaced |
+| `superseded_by` | integer | Set when a newer memory replaced this one (moved, corrected). Superseded rows are kept as history but never returned |
+| `supersede_reason` | text | Why it was replaced, if the user said (`moved`, `wrong`) |
 
-- It's an [FTS5](https://www.sqlite.org/fts5.html) full-text table. `recall` splits the query into
-  words (3+ characters), ORs them together and ranks matches by `bm25`.
-- FTS5 keeps its index in five internal tables: `memories_config`, `memories_content`,
-  `memories_data`, `memories_docsize` and `memories_idx`. Don't read or edit them directly; use
-  `memories`.
-- With `--store json`, memories go to `memories.json` instead, and this table is unused.
+- `forget` deletes the memory and the older versions it superseded. Nothing else hard-deletes.
+- Indexes: `(entity_id, attribute, occurred_at)` for series, and `salience`.
+
+#### `memories_fts`
+
+FTS5 index over `content`, `theme`, `keywords`, `attribute` and the entity name, with the
+`porter` stemmer ("drinks" matches "drink"). Rowid = `memories.id`. Triggers on `memories` keep
+it in sync, including manual `UPDATE`s. `recall` searches all columns; associative recall
+searches only `theme` and `keywords`. FTS5 keeps its data in internal `memories_fts_*` tables;
+don't edit those.
+
+#### `relationships`
+
+| Column | Type | Description |
+|---|---|---|
+| `id` | integer | Shown to the model as `r3` |
+| `entity_a` | integer | Usually the user |
+| `entity_b` | integer | The other entity: "*b* is *a*'s *link_type*" |
+| `link_type` | text | e.g. `sister`, `manager`, `dog` |
+| `salience`, `provenance`, `recorded_at` | | As in `memories` |
+| `superseded_by` | integer | Reserved for corrections; not set by anything yet |
+
+#### `memory_meta`
+
+Key/value settings: `consolidated_at` (last consolidator run) and `v1_migrated` (rows copied
+from the old table).
+
+#### `memories_v1`
+
+Only in databases created before the current schema: the original FTS5 table
+(`id, content, tags, created_at`), renamed on first open. Its rows were copied into `memories` as
+plain user facts. It's kept as a backup and nothing reads it; drop it with
+`DROP TABLE memories_v1` once you're happy with the migration.
 
 ### `sources`
 
@@ -143,7 +207,9 @@ is set in `.env`. Its schema belongs to Phoenix and can change between versions,
 the Phoenix UI at http://127.0.0.1:6006 rather than querying it.
 
 It holds, per conversation turn: prompts and responses, token counts and costs, tool inputs and
-outputs, and the SQL text of every `memories.db` query (without parameter values).
+outputs, and the SQL text of every `memories.db` query made during the turn (without parameter
+values). App traffic is in the `personal-assistant` project, eval runs in
+`personal-assistant-evals` (one session per run).
 
 ## Looking at the data
 
@@ -153,7 +219,16 @@ and `/sources` in the terminal chat.
 With the `sqlite3` CLI (`sudo apt install sqlite3`):
 
 ```bash
-sqlite3 -header -column memories.db "SELECT id, content, tags FROM memories"
+# Current memories, most important first
+sqlite3 -header -column memories.db \
+  "SELECT m.id, e.name AS about, kind, attribute, round(salience, 2) AS sal, content
+   FROM memories m JOIN entities e ON e.id = m.entity_id
+   WHERE superseded_by IS NULL ORDER BY salience DESC"
+
+# What was replaced, and by what
+sqlite3 -header -column memories.db \
+  "SELECT old.content AS was, new.content AS now, old.supersede_reason AS why
+   FROM memories old JOIN memories new ON new.id = old.superseded_by"
 
 sqlite3 -header -column memories.db \
   "SELECT id, task, successes, failures, url_template FROM sources ORDER BY id"
@@ -188,7 +263,8 @@ Stop the app first. Then either delete specific data:
 sqlite3 memories.db "DELETE FROM pages"       # clear the page cache
 sqlite3 memories.db "DELETE FROM fetch_log"   # clear the audit log
 sqlite3 memories.db "DELETE FROM sources"     # forget all cached sources
-sqlite3 memories.db "DELETE FROM memories"    # forget everything about the user
+sqlite3 memories.db "DELETE FROM memories; DELETE FROM relationships; DELETE FROM entities WHERE type != 'user'"
+                                              # forget everything about the user
 ```
 
 or remove `memories.db` entirely; it's recreated empty on the next start. To clear traces, delete

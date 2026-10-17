@@ -23,7 +23,7 @@ services:
     restart: unless-stopped
 
   phoenix:
-    image: arizephoenix/phoenix:latest
+    image: arizephoenix/phoenix:version-20.19.0   # pinned; bump deliberately
     environment:
       PHOENIX_WORKING_DIR: /mnt/data
       PHOENIX_TELEMETRY_ENABLED: "false"

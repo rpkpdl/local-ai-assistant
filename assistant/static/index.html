@@ -184,11 +184,11 @@
 const $ = (id) => document.getElementById(id);
 const thread = $("thread"), scroller = $("messages"), input = $("input"), sendBtn = $("send");
 let busy = false, turnNo = 0;
-const totals = { agent: 0, judge: 0 };
+const totals = { agent: 0, judge: 0, memory: 0 };
 const usd = (n) => `$${n.toFixed(4)}`;
 function renderTotals() {
-  $("totalCost").textContent = usd(totals.agent + totals.judge);
-  $("totalSplit").textContent = `agent ${usd(totals.agent)} · judge ${usd(totals.judge)} · ${turnNo} turn${turnNo === 1 ? "" : "s"}`;
+  $("totalCost").textContent = usd(totals.agent + totals.judge + totals.memory);
+  $("totalSplit").textContent = `agent ${usd(totals.agent)} · judge ${usd(totals.judge)} · memory ${usd(totals.memory)} · ${turnNo} turn${turnNo === 1 ? "" : "s"}`;
 }
 
 // ---------- preferences ----------
@@ -314,15 +314,23 @@ function handle(ev, a, log) {
       a.status.querySelector(".what").textContent = `Using ${ev.name}…`;
       log.toolStart(ev); break;
     case "tool_end": log.toolEnd(ev); break;
-    case "llm": log.llm(ev); break;
+    case "llm":
+      log.llm(ev);
+      if (ev.role === "agent" && ev.stop_reason === "end_turn") a.status.querySelector(".what").textContent = "Updating memory…";
+      break;
     case "notice":
       a.body.append(el("div", "notice", ev.text)); log.note(ev.text); break;
+    case "memory": {
+      const label = { saved: "Remembered", updated: "Updated memory", linked: "Remembered" }[ev.action] || "Memory";
+      a.body.append(el("div", "notice", `${label}: ${ev.text}`)); log.note(`memory ${ev.action} (${ev.id}): ${ev.text}`);
+      break;
+    }
     case "error":
       a.body.append(el("div", "error", ev.message)); log.bad(ev.message); break;
     case "done":
       log.done(ev);
       if (document.body.classList.contains("verbose")) a.wrap.append(el("div", "meta",
-        `${(ev.ms / 1000).toFixed(1)} s · ${usd(ev.cost)}` + (ev.judge_cost ? ` (agent ${usd(ev.agent_cost)} + judge ${usd(ev.judge_cost)})` : "")));
+        `${(ev.ms / 1000).toFixed(1)} s · ${usd(ev.cost)}` + (ev.judge_cost || ev.memory_cost ? ` (agent ${usd(ev.agent_cost)} + judge ${usd(ev.judge_cost)} + memory ${usd(ev.memory_cost || 0)})` : "")));
       break;
   }
 }
@@ -358,8 +366,8 @@ function startTurnLog(text) {
     },
     llm(ev) {
       const d = el("details", "ev"), s = el("summary");
-      const judge = ev.role === "judge";
-      s.append(el("span", judge ? "kind judge" : "kind", judge ? "judge" : "llm"), el("span", "name", ev.model));
+      const side = ev.role === "judge" || ev.role === "memory";
+      s.append(el("span", side ? "kind judge" : "kind", side ? ev.role : "llm"), el("span", "name", ev.model));
       s.append(el("span", "right", `${ev.input_tokens.toLocaleString()} in · ${ev.output_tokens.toLocaleString()} out · ${ev.ms} ms` + (ev.cost != null ? ` · $${ev.cost.toFixed(4)}` : "")));
       const detail = el("div", "detail");
       detail.append(el("pre", null, `stop_reason: ${ev.stop_reason}\ncache read: ${ev.cache_read_tokens}\ncache write: ${ev.cache_write_tokens}`));
@@ -369,8 +377,8 @@ function startTurnLog(text) {
     bad(text) { add(el("div", "ev bad", text)); },
     done(ev) {
       t.textContent = `${(ev.ms / 1000).toFixed(1)} s · ${usd(ev.cost)}`;
-      add(el("div", "turn-cost", `agent ${usd(ev.agent_cost)} + judge ${usd(ev.judge_cost)} = ${usd(ev.cost)}`));
-      totals.agent += ev.agent_cost; totals.judge += ev.judge_cost; renderTotals();
+      add(el("div", "turn-cost", `agent ${usd(ev.agent_cost)} + judge ${usd(ev.judge_cost)} + memory ${usd(ev.memory_cost || 0)} = ${usd(ev.cost)}`));
+      totals.agent += ev.agent_cost; totals.judge += ev.judge_cost; totals.memory += ev.memory_cost || 0; renderTotals();
     },
   };
 }
@@ -384,7 +392,8 @@ async function refreshSide() {
     if (!list.length) p.append(el("p", "hint", "No memories yet."));
     for (const m of list.slice().reverse()) {
       const c = el("div", "card"); c.append(el("div", null, m.content));
-      const sub = el("div", "sub", `${m.id} · ${new Date(m.created_at * 1000).toLocaleDateString()} `);
+      const kind = m.kind + (m.attribute ? `:${m.attribute}` : "") + (m.entity ? ` · ${m.entity}` : "");
+      const sub = el("div", "sub", `${m.id} · ${kind} · ${m.salience.toFixed(2)} · ${new Date(m.created_at * 1000).toLocaleDateString()} `);
       if (m.tags.length) sub.append(el("span", "tags", m.tags.join(", ")));
       c.append(sub); p.append(c);
     }
@@ -421,7 +430,7 @@ $("newChat").addEventListener("click", async () => {
   thread.firstChild.id = "empty";
   thread.firstChild.innerHTML = "<h2>New conversation</h2>Memories and sources are kept.";
   $("turns").replaceChildren(el("p", "hint", "Tool calls, API calls and costs for each turn appear here."));
-  turnNo = 0; totals.agent = 0; totals.judge = 0; renderTotals(); input.focus();
+  turnNo = 0; totals.agent = 0; totals.judge = 0; totals.memory = 0; renderTotals(); input.focus();
 });
 
 fetch("/api/state").then((r) => r.json()).then((s) => {

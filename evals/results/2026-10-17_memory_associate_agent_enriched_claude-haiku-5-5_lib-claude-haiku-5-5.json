@@ -1,0 +1,393 @@
+{
+  "eval": "memory_associate_agent_enriched",
+  "model": "claude-haiku-5-5",
+  "librarian_model": "claude-haiku-5-5",
+  "date": "2026-10-17",
+  "cost": 0.0186,
+  "summary": {
+    "fire": {
+      "pass": "11/11"
+    },
+    "quiet_filter": {
+      "pass": "4/5"
+    },
+    "quiet_llm": {
+      "pass": "4/5"
+    },
+    "all": {
+      "pass": "19/21"
+    }
+  },
+  "rows": [
+    {
+      "q": "I'm flying to Portland next week.",
+      "expects": [
+        "flight_snacks"
+      ],
+      "mention_any": [
+        "snack",
+        "hungry",
+        "starving",
+        "food"
+      ],
+      "group": "fire",
+      "candidates": [
+        "flight_snacks"
+      ],
+      "pass": true,
+      "answer": "Sounds like a trip. Last time a flight was delayed 5 hours, you were stuck at the airport starving with no snacks, so you may want to pack some this time. Since you're vegetarian, something like nuts, a granola bar, or a sandwich would work well.\n\nDo you want me to check the Portland weather for next week, or do you need anything else for the trip?",
+      "cost": 0.00038
+    },
+    {
+      "q": "Heading to the airport now!",
+      "expects": [
+        "flight_snacks"
+      ],
+      "mention_any": [
+        "snack",
+        "hungry",
+        "starving",
+        "food"
+      ],
+      "group": "fire",
+      "candidates": [
+        "flight_snacks"
+      ],
+      "pass": true,
+      "answer": "Have a safe trip! Last time your flight was delayed 5 hours and you were stuck hungry with no snacks, so grab something vegetarian before you board. Safe travels!",
+      "cost": 0.000342
+    },
+    {
+      "q": "Booking a trip to Chicago. Is the red-eye flight worth it to save money?",
+      "expects": [
+        "flight_snacks",
+        "bus_sleep"
+      ],
+      "mention_any": [
+        "snack",
+        "hungry",
+        "starving",
+        "bus",
+        "couldn't sleep",
+        "didn't sleep"
+      ],
+      "group": "fire",
+      "candidates": [
+        "flight_snacks",
+        "charger",
+        "bus_sleep"
+      ],
+      "pass": true,
+      "answer": "A red-eye is worth it only if the savings are large enough to cover a rough night. You mentioned that an overnight bus left you unable to sleep at all and you swore off overnight travel. If you're like that on planes, you'd arrive in Chicago exhausted and possibly lose the first day.\n\nBefore booking, check:\n- **The savings:** If it's under about $75-100, the sleep cost usually isn't worth it.\n- **Arrival time:** Red-eyes often land around 5-7 a.m., so you may not be able to check into a hotel until afternoon.\n- **Your sleep on planes:** If you can't doze upright, a red-eye is a poor trade.\n- **Food:** Many red-eyes have few or no meal options. Since you're vegetarian, pack snacks, since being stuck hungry is what made your delayed flight so bad.\n\nIf you tell me your departure city and dates, I can look up current fares for the red-eye and a daytime flight so you can compare the actual difference.",
+      "cost": 0.000603
+    },
+    {
+      "q": "Thinking of taking the night bus to Boston to save some money.",
+      "expects": [
+        "bus_sleep"
+      ],
+      "mention_any": [
+        "last time",
+        "couldn't sleep",
+        "didn't sleep",
+        "never again",
+        "coast"
+      ],
+      "group": "fire",
+      "candidates": [
+        "bus_sleep"
+      ],
+      "pass": true,
+      "answer": "That memory is relevant: you couldn't sleep on an overnight bus to the coast and said never again. Denver to Boston is about 1,800 miles, so a bus trip would likely take 40 or more hours with transfers, which is a lot more than one night. Before you commit, it's worth checking whether a cheap flight would cost only a bit more once you count the bus fare plus a lost day or two.\n\nIf you want, I can look up current bus and flight prices for your dates. What dates are you considering?",
+      "cost": 0.000457
+    },
+    {
+      "q": "Where should we go for sushi on Friday?",
+      "expects": [
+        "sushi"
+      ],
+      "mention_any": [
+        "sakura",
+        "food poisoning"
+      ],
+      "group": "fire",
+      "candidates": [
+        "sushi"
+      ],
+      "pass": true,
+      "answer": "I'd skip Sakura Sushi on 5th Street, since you got sick there and don't want to go back. I don't have a list of other Denver sushi spots saved, so I can't recommend one from memory. If you tell me the neighborhood or what you want (dine-in, takeout, or a big group), I can look up current options.\n\nSince you're vegetarian, check that the place has real vegetable rolls like avocado, cucumber, inari, or veggie tempura, and that they don't use fish-based dashi or mayo-based sauces without asking. Because you usually get takeout on Fridays, a sushi place that delivers or does takeout might suit you too.",
+      "cost": 0.000907
+    },
+    {
+      "q": "Let's order from Sakura tonight.",
+      "expects": [
+        "sushi"
+      ],
+      "mention_any": [
+        "food poisoning",
+        "sick",
+        "won't go back"
+      ],
+      "group": "fire",
+      "candidates": [
+        "sushi"
+      ],
+      "pass": true,
+      "answer": "Heads up: you got food poisoning from Sakura Sushi on 5th Street and said you wouldn't go back. Is this the same place? If it's a different Sakura, tell me the address or cuisine and I can help you find vegetarian options nearby in Denver.",
+      "cost": 0.000407
+    },
+    {
+      "q": "Big client presentation in Dallas on Tuesday, I'm packing tonight.",
+      "expects": [
+        "charger"
+      ],
+      "allowed": [
+        "flight_snacks"
+      ],
+      "mention_any": [
+        "charger"
+      ],
+      "group": "fire",
+      "candidates": [
+        "charger"
+      ],
+      "pass": true,
+      "answer": "Good luck with the presentation. Since you forgot your laptop charger before a presentation once, put it in your bag tonight, and maybe a backup battery or a spare cable too.\n\nWant me to check the Dallas forecast for Tuesday so you know whether to pack a jacket or an umbrella?",
+      "cost": 0.000392
+    },
+    {
+      "q": "I have a terrible headache, which painkiller should I take?",
+      "expects": [
+        "ibuprofen"
+      ],
+      "mention_any": [
+        "ibuprofen",
+        "reaction"
+      ],
+      "group": "fire",
+      "candidates": [
+        "ibuprofen"
+      ],
+      "pass": true,
+      "answer": "Given your bad reaction to ibuprofen before, I'd avoid it this time. Acetaminophen (Tylenol) is usually the safer choice. Follow the label dose, and don't take more than the daily maximum, since acetaminophen can harm the liver in overdose. Check that other cold or flu products you're using don't also contain acetaminophen.\n\nIf you're unsure whether it's safe for you, call a pharmacist or your doctor.\n\nGet medical care right away if the headache is sudden and severe, or comes with fever, stiff neck, confusion, vision changes, weakness, numbness, trouble speaking, or a rash.",
+      "cost": 0.000498
+    },
+    {
+      "q": "About to take some Advil for my back.",
+      "expects": [
+        "ibuprofen"
+      ],
+      "mention_any": [
+        "ibuprofen",
+        "reaction",
+        "urgent care"
+      ],
+      "group": "fire",
+      "candidates": [
+        "ibuprofen"
+      ],
+      "pass": true,
+      "answer": "Before you take it: last time you had a bad reaction to ibuprofen and ended up in urgent care. If it's the same thing, don't take the Advil. Acetaminophen (Tylenol) is an option for back pain, but check with a pharmacist or your doctor first, especially given the earlier reaction. If you have trouble breathing, swelling, hives, or any symptoms like the ones you had before, get medical help right away.",
+      "cost": 0.000408
+    },
+    {
+      "q": "We're moving apartments next month, any tips?",
+      "expects": [
+        "movers"
+      ],
+      "mention_any": [
+        "late",
+        "last move",
+        "last time"
+      ],
+      "group": "fire",
+      "candidates": [
+        "movers"
+      ],
+      "pass": true,
+      "answer": "Sorry the last move was so rough with movers 4 hours late. Since that happened before, I'd book movers or a truck with a confirmed arrival window and call the day before to confirm. Ask about a backup plan if they're late, like a flexible start time at the new place or a friend on standby.\n\nOther tips for next month:\n\n- **Declutter first.** Sell, donate, or toss things now. Less to pack means less to move and less cost.\n- **Book early.** Movers and trucks fill up fast, especially near month-end in Denver.\n- **Update your address.** Forward your mail with USPS, and update your bank, insurance, driver's license, and voter registration.\n- **Schedule utilities.** Set up internet, electricity, gas, and water at the new place a week ahead, and schedule shutoffs at the old one for the day after you leave.\n- **Pack by room.** Label boxes with the room and a short list of contents. Pack an \"essentials\" box with toiletries, chargers, a few days of clothes, and basic kitchen items.\n- **Keep your vegetarian kitchen basics handy.** Pack a box of pantry staples and a few cooking tools so you can cook your first night without hunting for everything.\n- **Do a walkthrough.** Photograph the old unit's condition for your deposit, and check the new one for damage before you sign off.\n\nDo you want a packing checklist or a moving timeline to count down the month?",
+      "cost": 0.00053
+    },
+    {
+      "q": "Got tickets to see a band at the stadium next weekend!",
+      "expects": [
+        "concert_phone"
+      ],
+      "mention_any": [
+        "phone"
+      ],
+      "group": "fire",
+      "candidates": [
+        "concert_phone"
+      ],
+      "pass": true,
+      "answer": "That's exciting! Last summer you lost your phone in the crowd at a stadium concert, so this time you might clip it to a lanyard or keep it in a zipped inside pocket, and snap a photo of your section and meeting spot before you go in.\n\nWhich band is it, and which stadium? I can check the weather for the day or help you plan the trip.",
+      "cost": 0.00038
+    },
+    {
+      "q": "Is it going to rain tomorrow?",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "snack",
+        "sushi",
+        "ibuprofen",
+        "charger",
+        "bus",
+        "movers",
+        "phone"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": true,
+      "answer": "No, it's not expected to rain in Denver tomorrow (Oct 18). The forecast shows a 1% chance of precipitation and 0.0 mm expected.\n\nI saved the forecast source for future weather checks. The review accepted it.",
+      "cost": 0.0077
+    },
+    {
+      "q": "What's a 15% tip on $64?",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "snack",
+        "sushi",
+        "ibuprofen",
+        "charger",
+        "bus",
+        "takeout"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": true,
+      "answer": "15% of $64 is **$9.60**, so the total would be $73.60.",
+      "cost": 0.000271
+    },
+    {
+      "q": "How many miles is a marathon?",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "snack",
+        "sushi",
+        "ibuprofen",
+        "charger",
+        "bus"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": true,
+      "answer": "A marathon is 26.2 miles (42.195 km).",
+      "cost": 0.000269
+    },
+    {
+      "q": "Can you recommend some music for studying?",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "jazz",
+        "concert",
+        "phone"
+      ],
+      "group": "quiet_llm",
+      "candidates": [
+        "concert_phone"
+      ],
+      "pass": true,
+      "answer": "Here are some options that tend to work well for focus:\n\n- **Lo-fi hip hop:** Nujabes, Tomppabeats, Kupla, or the Lofi Girl playlists on YouTube and Spotify.\n- **Instrumental film scores:** Ludovico Einaudi, Hans Zimmer (*Interstellar*, *Inception*), or Joe Hisaishi (Studio Ghibli).\n- **Ambient and electronic:** Brian Eno, Tycho, Bonobo, or Boards of Canada.\n- **Classical:** Bach's cello suites or Vivaldi's *Four Seasons* for steady, predictable rhythm. Chopin's nocturnes work for quieter tasks.\n- **Nature or brown noise:** Rain, cafe ambience, or brown noise if you want no melody at all.\n\nLyrics tend to distract most people during reading or writing, so instrumental music is usually the safer choice. If you tell me what you're studying and what kind of music you already like, I can narrow this down.",
+      "cost": 0.000477
+    },
+    {
+      "q": "It's Friday! What should I get for dinner?",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "usually order",
+        "takeout on fridays",
+        "sakura"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": false,
+      "answer": "Happy Friday! Since you usually get takeout on Fridays, here are some vegetarian options in Denver:\n\n- **Indian:** A paneer tikka masala or chana masala with garlic naan.\n- **Thai:** Vegetable pad see ew or green curry with tofu.\n- **Mexican:** Veggie burritos or bean and cheese enchiladas.\n- **Pizza:** A veggie or margherita pizza, with a salad on the side.\n\nI'd skip Sakura Sushi on 5th Street, given the food poisoning last time. Do you want something cozy, spicy, or light tonight?",
+      "cost": 0.000744
+    },
+    {
+      "q": "I'm searing a steak in my cast iron skillet tonight.",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "burn",
+        "handle"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": true,
+      "answer": "Sounds like a good dinner. Before you start, your profile says you're vegetarian. Is the steak for someone else, or has your diet changed? If it has, I can update that.\n\nIf the steak is for you or a guest, here's a quick searing method:\n\n1. Pat the steak very dry and season it generously with salt and pepper about 30 minutes ahead, or at least 10 minutes before cooking.\n2. Heat the skillet over medium-high for 3 to 5 minutes until it's very hot. A drop of water should sizzle and evaporate right away.\n3. Add a high-smoke-point oil like avocado or canola. Lay the steak down away from you.\n4. Don't move it for 3 to 4 minutes, until a deep brown crust forms.\n5. Flip once. For the last minute, add butter, garlic, and thyme, and baste.\n6. Rest it 5 to 10 minutes before slicing. For a 1-inch steak, that's about 3 to 4 minutes per side for medium-rare.",
+      "cost": 0.000493
+    },
+    {
+      "q": "Explain how airplane wings generate lift.",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "snack",
+        "starving",
+        "delayed"
+      ],
+      "group": "quiet_llm",
+      "candidates": [],
+      "pass": true,
+      "answer": "Wings generate lift mainly by deflecting air downward. The air's reaction pushes the wing up.\n\n1. **Shape and angle:** A wing's cross-section (airfoil) is curved on top and flatter underneath, and it tilts slightly upward relative to the oncoming air (angle of attack).\n2. **Deflection:** The wing pushes air down as it moves forward. By Newton's third law, the air pushes the wing up. This is the main source of lift and is often called downwash.\n3. **Pressure difference:** The airflow over the curved top speeds up and its pressure drops, while the air below is slowed and pressure is higher. Bernoulli's principle links faster flow to lower pressure, and the pressure difference pushes the wing up.\n\nPressure and deflection are two views of the same physics. The wing's effect on the air and the air's pressure on the wing are linked.\n\nA common myth says air over the top must \"catch up\" to air underneath because it travels a longer path, so it moves faster. That isn't true. Air over the top often moves much faster than the equal-transit-time explanation predicts.",
+      "cost": 0.000474
+    },
+    {
+      "q": "What's the history of the Wright brothers' first flight?",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "snack",
+        "starving",
+        "delayed"
+      ],
+      "group": "quiet_llm",
+      "candidates": [
+        "flight_snacks"
+      ],
+      "pass": true,
+      "answer": "The Wright brothers, Orville and Wilbur, made the first sustained, controlled, powered airplane flights on **December 17, 1903**, at Kill Devil Hills near Kitty Hawk, North Carolina.\n\n- **Background:** The brothers ran a bicycle shop in Dayton, Ohio. From 1900 to 1902 they tested gliders at Kitty Hawk, where the steady winds and soft sand suited their experiments. They built a wind tunnel and tested many wing shapes to get accurate lift data. Their key innovation was three-axis control (warping the wings for roll, plus a movable rudder and elevator), which let a pilot steer the aircraft, not just balance it.\n- **The machine:** The *Wright Flyer* was a biplane of spruce and muslin with a 12-horsepower engine they built with their mechanic, Charlie Taylor. It had two propellers, which they designed themselves, and it took off from a wooden rail.\n- **The flights:** Four flights were made that day. Orville flew first, for about 12 seconds and 120 feet. Wilbur's longest flight covered about 852 feet in roughly 59 seconds. Five people witnessed the flights, including members of the Kill Devil Hills Life-Saving Station crew. A famous photograph shows the first flight.\n- **Aftermath:** A gust flipped the Flyer after the fourth flight and damaged it, so it never flew again. The brothers sent a telegram to their father, Bishop Milton Wright, announcing the success. Their claims were initially doubted, and they spent several years refining the design. They gave public demonstrations in 1908 and 1909, which established their achievement.",
+      "cost": 0.000738
+    },
+    {
+      "q": "Should I bring snacks to my kid's soccer game?",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "flight",
+        "airport",
+        "delayed"
+      ],
+      "group": "quiet_llm",
+      "candidates": [
+        "flight_snacks"
+      ],
+      "pass": true,
+      "answer": "Yes, bring snacks. Kids burn a lot of energy in a match, and games often run longer than expected. Last time you were stuck hungry with no snacks during a long delay, so it's worth packing some this time.\n\nSince you're vegetarian, fruit, granola bars, crackers, cheese sticks, or trail mix would work well. Bring water too, especially if it's hot.",
+      "cost": 0.000412
+    },
+    {
+      "q": "Is sushi actually healthy?",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "sakura",
+        "food poisoning"
+      ],
+      "group": "quiet_llm",
+      "candidates": [
+        "sushi"
+      ],
+      "pass": false,
+      "answer": "Sushi can be a healthy meal, though it depends on what you order.\n\n**The good parts:**\n- Fish like salmon and mackerel provide protein and omega-3 fats.\n- Seaweed (nori) adds iodine and minerals, and most rolls are low in fat.\n\n**The downsides:**\n- **Refined rice:** White sushi rice is high in refined carbs, and some restaurants add sugar to it.\n- **Sodium:** Soy sauce and pickled sides add a lot.\n- **Calories from extras:** Tempura, cream cheese, mayo, and eel sauce can make a roll much heavier.\n- **Mercury:** Large predatory fish like bigeye tuna and swordfish carry more mercury. Lighter fish are a safer choice if you eat sushi often.\n- **Food safety:** Raw fish carries some risk of foodborne illness, so it's worth choosing a restaurant with a good reputation.\n\n**As a vegetarian,** you have some good options:\n- Cucumber, avocado, or sweet potato tempura rolls\n- Inari (sweet tofu pouches)\n- Edamame, seaweed salad, or miso soup (ask whether the dashi is fish-based)\n\nSince you had food poisoning at Sakura Sushi, you might also look for a place with strong reviews for freshness and cleanliness.",
+      "cost": 0.0008
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "description": "Associative recall: the user's message isn't a question about memory, but a stored lived experience would help. 'expects' lists memories that should be surfaced (any one counts). An empty 'expects' means stay quiet. 'gate' says which stage must keep a quiet probe quiet: 'filter' means the plain-code gate (salience, provenance, rate limit, match) should already return nothing; 'llm' means a keyword match is expected to get through the filter and the agent must decide it's not useful. 'mention_any' / 'must_not_mention' check the agent's reply in agent mode. All details are synthetic.",
+  "memories": {
+    "flight_snacks": {"content": "User's flight was delayed 5 hours and they were starving at the airport with no snacks", "kind": "lesson", "theme": "travel,flight,food", "salience": 0.9, "provenance": "stated", "mode": "personal"},
+    "bus_sleep": {"content": "User couldn't sleep at all on an overnight bus to the coast and said never again", "kind": "lesson", "theme": "travel,sleep", "salience": 0.85, "provenance": "stated", "mode": "personal"},
+    "sushi": {"content": "User got food poisoning from Sakura Sushi on 5th Street and won't go back", "kind": "lesson", "theme": "food,restaurant,health", "salience": 0.9, "provenance": "stated", "mode": "personal"},
+    "charger": {"content": "User forgot their laptop charger on a work trip and the laptop died before a presentation", "kind": "lesson", "theme": "travel,work", "salience": 0.85, "provenance": "stated", "mode": "task"},
+    "ibuprofen": {"content": "User had a bad reaction to ibuprofen and ended up in urgent care", "kind": "lesson", "theme": "health,medicine", "salience": 0.95, "provenance": "stated", "mode": "personal"},
+    "movers": {"content": "User's last apartment move was stressful because the movers showed up 4 hours late", "kind": "event", "theme": "home,moving", "salience": 0.8, "provenance": "stated", "mode": "personal"},
+    "concert_phone": {"content": "User lost their phone in the crowd at a stadium concert last summer", "kind": "event", "theme": "music,events", "salience": 0.8, "provenance": "stated", "mode": "personal"},
+    "cast_iron": {"content": "User burned their hand on a hot cast iron skillet handle", "kind": "lesson", "theme": "cooking,home", "salience": 0.8, "provenance": "stated", "mode": "personal", "surfaced_days_ago": 1},
+    "jazz": {"content": "User might enjoy jazz, based on one playlist request", "kind": "fact", "theme": "music", "salience": 0.3, "provenance": "inferred", "mode": "personal"},
+    "takeout": {"content": "User usually orders takeout on Fridays", "kind": "fact", "theme": "food", "salience": 0.5, "provenance": "observed", "mode": "personal"},
+    "city": {"content": "User lives in Denver, Colorado", "kind": "fact", "attribute": "home_city", "theme": "home", "salience": 0.7, "provenance": "stated", "mode": "task"},
+    "diet": {"content": "User is vegetarian", "kind": "fact", "attribute": "diet", "theme": "food", "salience": 0.7, "provenance": "stated", "mode": "task"}
+  },
+  "probes": [
+    {"q": "I'm flying to Portland next week.", "expects": ["flight_snacks"], "mention_any": ["snack", "hungry", "starving", "food"]},
+    {"q": "Heading to the airport now!", "expects": ["flight_snacks"], "mention_any": ["snack", "hungry", "starving", "food"]},
+    {"q": "Booking a trip to Chicago. Is the red-eye flight worth it to save money?", "expects": ["flight_snacks", "bus_sleep"], "mention_any": ["snack", "hungry", "starving", "bus", "couldn't sleep", "didn't sleep"]},
+    {"q": "Thinking of taking the night bus to Boston to save some money.", "expects": ["bus_sleep"], "mention_any": ["last time", "couldn't sleep", "didn't sleep", "never again", "coast"]},
+    {"q": "Where should we go for sushi on Friday?", "expects": ["sushi"], "mention_any": ["sakura", "food poisoning"]},
+    {"q": "Let's order from Sakura tonight.", "expects": ["sushi"], "mention_any": ["food poisoning", "sick", "won't go back"]},
+    {"q": "Big client presentation in Dallas on Tuesday, I'm packing tonight.", "expects": ["charger"], "allowed": ["flight_snacks"], "mention_any": ["charger"]},
+    {"q": "I have a terrible headache, which painkiller should I take?", "expects": ["ibuprofen"], "mention_any": ["ibuprofen", "reaction"]},
+    {"q": "About to take some Advil for my back.", "expects": ["ibuprofen"], "mention_any": ["ibuprofen", "reaction", "urgent care"]},
+    {"q": "We're moving apartments next month, any tips?", "expects": ["movers"], "mention_any": ["late", "last move", "last time"]},
+    {"q": "Got tickets to see a band at the stadium next weekend!", "expects": ["concert_phone"], "mention_any": ["phone"]},
+
+    {"q": "Is it going to rain tomorrow?", "expects": [], "gate": "filter", "must_not_mention": ["snack", "sushi", "ibuprofen", "charger", "bus", "movers", "phone"]},
+    {"q": "What's a 15% tip on $64?", "expects": [], "gate": "filter", "must_not_mention": ["snack", "sushi", "ibuprofen", "charger", "bus", "takeout"]},
+    {"q": "How many miles is a marathon?", "expects": [], "gate": "filter", "must_not_mention": ["snack", "sushi", "ibuprofen", "charger", "bus"]},
+    {"q": "Can you recommend some music for studying?", "expects": [], "gate": "llm", "must_not_mention": ["jazz", "concert", "phone"]},
+    {"q": "It's Friday! What should I get for dinner?", "expects": [], "gate": "filter", "must_not_mention": ["usually order", "takeout on fridays", "sakura"]},
+    {"q": "I'm searing a steak in my cast iron skillet tonight.", "expects": [], "gate": "filter", "must_not_mention": ["burn", "handle"]},
+    {"q": "Explain how airplane wings generate lift.", "expects": [], "gate": "llm", "must_not_mention": ["snack", "starving", "delayed"]},
+    {"q": "What's the history of the Wright brothers' first flight?", "expects": [], "gate": "llm", "must_not_mention": ["snack", "starving", "delayed"]},
+    {"q": "Should I bring snacks to my kid's soccer game?", "expects": [], "gate": "llm", "must_not_mention": ["flight", "airport", "delayed"]},
+    {"q": "Is sushi actually healthy?", "expects": [], "gate": "llm", "must_not_mention": ["sakura", "food poisoning"]}
+  ]
+}

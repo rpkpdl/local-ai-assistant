@@ -1,0 +1,327 @@
+{
+  "eval": "memory_associate_retrieval",
+  "model": "sqlite-fts5",
+  "librarian_model": null,
+  "date": "2026-10-14",
+  "cost": 0.0,
+  "summary": {
+    "fire": {
+      "pass": "2/11"
+    },
+    "quiet_filter": {
+      "pass": "5/5"
+    },
+    "quiet_llm": {
+      "pass": "3/5"
+    },
+    "all": {
+      "pass": "10/21"
+    }
+  },
+  "rows": [
+    {
+      "q": "I'm flying to Portland next week.",
+      "expects": [
+        "flight_snacks"
+      ],
+      "mention_any": [
+        "snack",
+        "hungry",
+        "starving",
+        "food"
+      ],
+      "group": "fire",
+      "candidates": [],
+      "pass": false
+    },
+    {
+      "q": "Heading to the airport now!",
+      "expects": [
+        "flight_snacks"
+      ],
+      "mention_any": [
+        "snack",
+        "hungry",
+        "starving",
+        "food"
+      ],
+      "group": "fire",
+      "candidates": [],
+      "pass": false
+    },
+    {
+      "q": "Booking a trip to Chicago. Is the red-eye flight worth it to save money?",
+      "expects": [
+        "flight_snacks",
+        "bus_sleep"
+      ],
+      "mention_any": [
+        "snack",
+        "hungry",
+        "starving",
+        "bus",
+        "couldn't sleep",
+        "didn't sleep"
+      ],
+      "group": "fire",
+      "candidates": [
+        "flight_snacks"
+      ],
+      "pass": true
+    },
+    {
+      "q": "Thinking of taking the night bus to Boston to save some money.",
+      "expects": [
+        "bus_sleep"
+      ],
+      "mention_any": [
+        "last time",
+        "couldn't sleep",
+        "didn't sleep",
+        "never again",
+        "coast"
+      ],
+      "group": "fire",
+      "candidates": [],
+      "pass": false
+    },
+    {
+      "q": "Where should we go for sushi on Friday?",
+      "expects": [
+        "sushi"
+      ],
+      "mention_any": [
+        "sakura",
+        "food poisoning"
+      ],
+      "group": "fire",
+      "candidates": [],
+      "pass": false
+    },
+    {
+      "q": "Let's order from Sakura tonight.",
+      "expects": [
+        "sushi"
+      ],
+      "mention_any": [
+        "food poisoning",
+        "sick",
+        "won't go back"
+      ],
+      "group": "fire",
+      "candidates": [],
+      "pass": false
+    },
+    {
+      "q": "Big client presentation in Dallas on Tuesday, I'm packing tonight.",
+      "expects": [
+        "charger"
+      ],
+      "allowed": [
+        "flight_snacks"
+      ],
+      "mention_any": [
+        "charger"
+      ],
+      "group": "fire",
+      "candidates": [],
+      "pass": false
+    },
+    {
+      "q": "I have a terrible headache, which painkiller should I take?",
+      "expects": [
+        "ibuprofen"
+      ],
+      "mention_any": [
+        "ibuprofen",
+        "reaction"
+      ],
+      "group": "fire",
+      "candidates": [],
+      "pass": false
+    },
+    {
+      "q": "About to take some Advil for my back.",
+      "expects": [
+        "ibuprofen"
+      ],
+      "mention_any": [
+        "ibuprofen",
+        "reaction",
+        "urgent care"
+      ],
+      "group": "fire",
+      "candidates": [],
+      "pass": false
+    },
+    {
+      "q": "We're moving apartments next month, any tips?",
+      "expects": [
+        "movers"
+      ],
+      "mention_any": [
+        "late",
+        "last move",
+        "last time"
+      ],
+      "group": "fire",
+      "candidates": [
+        "movers"
+      ],
+      "pass": true
+    },
+    {
+      "q": "Got tickets to see a band at the stadium next weekend!",
+      "expects": [
+        "concert_phone"
+      ],
+      "mention_any": [
+        "phone"
+      ],
+      "group": "fire",
+      "candidates": [],
+      "pass": false
+    },
+    {
+      "q": "Is it going to rain tomorrow?",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "snack",
+        "sushi",
+        "ibuprofen",
+        "charger",
+        "bus",
+        "movers",
+        "phone"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": true
+    },
+    {
+      "q": "What's a 15% tip on $64?",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "snack",
+        "sushi",
+        "ibuprofen",
+        "charger",
+        "bus",
+        "takeout"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": true
+    },
+    {
+      "q": "How many miles is a marathon?",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "snack",
+        "sushi",
+        "ibuprofen",
+        "charger",
+        "bus"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": true
+    },
+    {
+      "q": "Can you recommend some music for studying?",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "jazz",
+        "concert",
+        "phone"
+      ],
+      "group": "quiet_llm",
+      "candidates": [
+        "concert_phone"
+      ],
+      "pass": false
+    },
+    {
+      "q": "It's Friday! What should I get for dinner?",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "usually order",
+        "takeout on fridays",
+        "sakura"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": true
+    },
+    {
+      "q": "I'm searing a steak in my cast iron skillet tonight.",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "burn",
+        "handle"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": true
+    },
+    {
+      "q": "Explain how airplane wings generate lift.",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "snack",
+        "starving",
+        "delayed"
+      ],
+      "group": "quiet_llm",
+      "candidates": [],
+      "pass": true
+    },
+    {
+      "q": "What's the history of the Wright brothers' first flight?",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "snack",
+        "starving",
+        "delayed"
+      ],
+      "group": "quiet_llm",
+      "candidates": [
+        "flight_snacks"
+      ],
+      "pass": false
+    },
+    {
+      "q": "Should I bring snacks to my kid's soccer game?",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "flight",
+        "airport",
+        "delayed"
+      ],
+      "group": "quiet_llm",
+      "candidates": [],
+      "pass": true
+    },
+    {
+      "q": "Is sushi actually healthy?",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "sakura",
+        "food poisoning"
+      ],
+      "group": "quiet_llm",
+      "candidates": [],
+      "pass": true
+    }
+  ]
+}

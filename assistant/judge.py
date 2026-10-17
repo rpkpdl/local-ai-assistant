@@ -7,13 +7,18 @@ any instructions hidden in the fetched content can't make it do anything else.
 from __future__ import annotations
 
 import json
+import os
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
 
 import anthropic
 
-JUDGE_MODEL = "claude-opus-5-5"
+from .models import fallback_options
+
+# JUDGE_MODEL in .env overrides it. Keep it on a model that passes the injection cases in
+# evals/datasets/source_judge.json: it's the prompt-injection defense for saved sources.
+JUDGE_MODEL = os.getenv("JUDGE_MODEL") or "claude-opus-5-5"
 SAMPLE_CHARS = 4000
 
 JUDGE_SYSTEM = """You vet URLs before a personal assistant caches them for reuse.
@@ -69,8 +74,7 @@ class SourceJudge:
                 messages=[{"role": "user", "content": prompt}],
                 output_config={"effort": "low", "format": {"type": "json_schema",
                                                            "schema": VERDICT_SCHEMA}},
-                betas=["server-side-fallback-2026-07-01"],
-                fallbacks="default",
+                **fallback_options(JUDGE_MODEL),
             )
         except anthropic.APIError as e:
             return Verdict(False, f"Source check failed ({e.__class__.__name__}); not saved.")

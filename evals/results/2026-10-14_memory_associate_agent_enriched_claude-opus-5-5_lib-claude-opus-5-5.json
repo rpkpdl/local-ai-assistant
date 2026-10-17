@@ -1,0 +1,396 @@
+{
+  "eval": "memory_associate_agent_enriched",
+  "model": "claude-opus-5-5",
+  "librarian_model": "claude-opus-5-5",
+  "date": "2026-10-14",
+  "cost": 0.6447,
+  "summary": {
+    "fire": {
+      "pass": "11/11"
+    },
+    "quiet_filter": {
+      "pass": "3/5"
+    },
+    "quiet_llm": {
+      "pass": "4/5"
+    },
+    "all": {
+      "pass": "18/21"
+    }
+  },
+  "rows": [
+    {
+      "q": "I'm flying to Portland next week.",
+      "expects": [
+        "flight_snacks"
+      ],
+      "mention_any": [
+        "snack",
+        "hungry",
+        "starving",
+        "food"
+      ],
+      "group": "fire",
+      "candidates": [
+        "flight_snacks"
+      ],
+      "pass": true,
+      "answer": "Sounds fun! Last time your flight got delayed you were stuck at the airport for 5 hours with nothing to eat, so it might be worth packing some vegetarian snacks this time. Trail mix, protein bars, or a sandwich would all work.\n\nI can also check the Portland weather for next week or help with anything else for the trip. Just let me know which days you'll be there, and whether it's Portland, Oregon or Portland, Maine.",
+      "cost": 0.015892
+    },
+    {
+      "q": "Heading to the airport now!",
+      "expects": [
+        "flight_snacks"
+      ],
+      "mention_any": [
+        "snack",
+        "hungry",
+        "starving",
+        "food"
+      ],
+      "group": "fire",
+      "candidates": [
+        "flight_snacks"
+      ],
+      "pass": true,
+      "answer": "Have a great trip! Two quick things before you're out the door:\n\n- **Snacks:** Last time your flight was delayed 5 hours and you got stuck hungry. Grab a couple of vegetarian snacks, like trail mix, a granola bar or some fruit, in case it happens again.\n- **Chargers:** If you're bringing your laptop, check that the charger is in your bag. It's easy to forget, and you've been caught without one before.\n\nWant me to check anything for your flight or destination?",
+      "cost": 0.029276
+    },
+    {
+      "q": "Booking a trip to Chicago. Is the red-eye flight worth it to save money?",
+      "expects": [
+        "flight_snacks",
+        "bus_sleep"
+      ],
+      "mention_any": [
+        "snack",
+        "hungry",
+        "starving",
+        "bus",
+        "couldn't sleep",
+        "didn't sleep"
+      ],
+      "group": "fire",
+      "candidates": [
+        "flight_snacks",
+        "bus_sleep",
+        "charger"
+      ],
+      "pass": true,
+      "answer": "Probably not, for you. Last time you took an overnight bus to the coast, you couldn't sleep at all and said \"never again.\" A red-eye from Denver to Chicago would likely be even worse:\n\n- **The flight is short.** It's only about 2.5 hours, and Chicago is an hour ahead. If you leave around 11pm–midnight, you land around 4–5am Central with maybe 1.5 hours of broken sleep at best.\n- **You'd lose the first day.** You'd arrive tired, probably before you can check in to your hotel, and could be groggy through most of the next day.\n- **The savings may be small.** Denver–Chicago is a busy route with lots of daytime flights, so cheap fares are common. Compare the actual price difference.\n\n**It might be worth it if:**\n- You'd save $100 or more and your plans for the first day are easy\n- You can get an early hotel check-in, or you don't mind napping in a lounge or café\n\n**Cheaper options that don't cost you sleep:**\n- The first flight of the morning (6–7am) is often just as cheap\n- Tuesday and Wednesday flights are usually cheaper\n- Midway (MDW) can be cheaper than O'Hare (ORD), especially on Southwest\n\nIf you do book the red-eye, bring an eye mask, earplugs, and a neck pillow, and plan a slow first morning. Want me to look up current fares?",
+      "cost": 0.022916
+    },
+    {
+      "q": "Thinking of taking the night bus to Boston to save some money.",
+      "expects": [
+        "bus_sleep"
+      ],
+      "mention_any": [
+        "last time",
+        "couldn't sleep",
+        "didn't sleep",
+        "never again",
+        "coast"
+      ],
+      "group": "fire",
+      "candidates": [
+        "bus_sleep"
+      ],
+      "pass": true,
+      "answer": "Worth thinking twice. Last time you took an overnight bus to the coast, you couldn't sleep at all and said \"never again.\"\n\nAlso, if you're going from Denver, it isn't one night. Denver to Boston by bus usually takes 40+ hours with several transfers, so that's two nights on the bus.\n\nSome things to weigh:\n- **Real savings:** Budget flights from Denver to Boston can come close to bus prices if you book early, fly midweek, or take a basic economy fare. Once you add food for two days on the road, the gap may be small.\n- **If you still go:** Get a neck pillow, an eye mask, earplugs or noise-cancelling headphones, and a window seat. Also bring your own vegetarian snacks, since rest stops often don't have much.\n- **Middle option:** Take a cheap flight to a nearby hub like New York, then a short, cheap bus to Boston.\n\nAre you leaving from Denver, and do you have dates? I can help compare prices.",
+      "cost": 0.018956
+    },
+    {
+      "q": "Where should we go for sushi on Friday?",
+      "expects": [
+        "sushi"
+      ],
+      "mention_any": [
+        "sakura",
+        "food poisoning"
+      ],
+      "group": "fire",
+      "candidates": [
+        "sushi"
+      ],
+      "pass": true,
+      "answer": "I couldn't check live listings right now, so these suggestions come from general knowledge and not current reviews. Check the hours and menus before Friday. Here are some well-known Denver sushi places with good vegetarian options:\n\n- **Uchi (RiNo):** Creative and upscale. It has historically offered a vegetarian tasting menu, which makes it a good pick for a special night.\n- **Sushi Den (South Pearl St):** A Denver classic with very fresh fish for whoever's with you, plus solid veggie rolls. It's busy on Fridays, so book ahead.\n- **Sushi Sasa (Highland):** Elegant, with good vegetable maki and sides.\n- **Sushi Ronin (LoHi):** A lively, casual spot with good vegetable nigiri.\n\nI left Sakura Sushi on 5th Street off the list, since you got food poisoning there.\n\nYou usually get takeout on Fridays. Is this a night out, or do you want delivery? Sushi Den and Sushi Ronin both work well for takeout.",
+      "cost": 0.03928
+    },
+    {
+      "q": "Let's order from Sakura tonight.",
+      "expects": [
+        "sushi"
+      ],
+      "mention_any": [
+        "food poisoning",
+        "sick",
+        "won't go back"
+      ],
+      "group": "fire",
+      "candidates": [
+        "sushi"
+      ],
+      "pass": true,
+      "answer": "Quick check: I have a note that you got food poisoning from Sakura Sushi on 5th Street and said you wouldn't go back. Do you mean a different Sakura, or have you decided to give that one another try?\n\nOnce you tell me which one, I can help you pick some vegetarian options from their menu.",
+      "cost": 0.014716
+    },
+    {
+      "q": "Big client presentation in Dallas on Tuesday, I'm packing tonight.",
+      "expects": [
+        "charger"
+      ],
+      "allowed": [
+        "flight_snacks"
+      ],
+      "mention_any": [
+        "charger"
+      ],
+      "group": "fire",
+      "candidates": [
+        "charger",
+        "flight_snacks"
+      ],
+      "pass": true,
+      "answer": "Good luck with the presentation! A few things for tonight:\n\n**Pack the laptop charger first.** Last time you forgot it on a work trip and your laptop died before a presentation. Put it in your bag now. A spare HDMI/USB-C adapter and a copy of the deck on a USB stick or in the cloud are good backups too.\n\n**Bring snacks for the flight.** You once got stuck at the airport for 5 hours with nothing to eat, and vegetarian options at the gate can be thin. Nuts, protein bars or trail mix are easy to pack.\n\n**Dallas weather (Open-Meteo forecast):**\n- **Tuesday:** 67–77°F, about a 3% chance of rain. Comfortable for a suit.\n- **Thu–Mon:** colder, with lows around 51–60°F, so bring a light jacket for evenings.\n- **Wed–Thu:** still hot, up to 89–92°F, if you're getting there early.\n\nI saved Open-Meteo as a weather source, so I can check forecasts faster next time.",
+      "cost": 0.084472
+    },
+    {
+      "q": "I have a terrible headache, which painkiller should I take?",
+      "expects": [
+        "ibuprofen"
+      ],
+      "mention_any": [
+        "ibuprofen",
+        "reaction"
+      ],
+      "group": "fire",
+      "candidates": [
+        "ibuprofen"
+      ],
+      "pass": true,
+      "answer": "Sorry you're dealing with that. One important thing: I have a note that you **had a bad reaction to ibuprofen and ended up in urgent care**, so avoid ibuprofen (Advil, Motrin).\n\n**Usually the safer choice for you: acetaminophen** (Tylenol)\n- Typical adult dose is 500–1,000 mg every 4–6 hours. Don't take more than 3,000–4,000 mg in 24 hours.\n- Check other medicines you're taking, like cold or flu products. Many of them already contain acetaminophen, so you could take too much without realizing it.\n- Be more careful if you drink a lot of alcohol or have liver problems.\n\n**Be careful with naproxen (Aleve) and aspirin.** They're in the same drug family as ibuprofen (NSAIDs). People who react to one often react to the others too. Don't take them unless a doctor or pharmacist says they're OK for you.\n\n**Things that might also help:** drinking water, eating something, caffeine, a dark quiet room, or a cold compress on your forehead or neck. If you've just gotten to Denver or recently gone higher up, the altitude and dry air can make headaches worse. Drinking more water often helps with that.\n\n**Get care right away if** this is the worst headache of your life, it came on suddenly like a thunderclap, or it comes with any of these: fever and a stiff neck, confusion, weakness or numbness, trouble speaking, vision changes, or a recent head injury.\n\nI'm not a doctor. If you're unsure, a pharmacist can quickly tell you what's safe given your ibuprofen reaction. Hope you feel better soon.",
+      "cost": 0.023964
+    },
+    {
+      "q": "About to take some Advil for my back.",
+      "expects": [
+        "ibuprofen"
+      ],
+      "mention_any": [
+        "ibuprofen",
+        "reaction",
+        "urgent care"
+      ],
+      "group": "fire",
+      "candidates": [
+        "ibuprofen"
+      ],
+      "pass": true,
+      "answer": "Hold on before you take it: Advil is ibuprofen, and I have a note that you once had a bad reaction to ibuprofen and ended up in urgent care.\n\nIf that's right, it's best to skip it. Some other options:\n- **Acetaminophen (Tylenol)** works differently from ibuprofen and is often what people take when they can't have NSAIDs. Just don't go over the dose on the label.\n- **Heat or ice**, gentle stretching, or a short walk can help with back pain.\n- **Ask a pharmacist** if you're unsure. They can check what's safe for you, since naproxen (Aleve) and aspirin are related to ibuprofen and can cause similar reactions.\n\nIf you've already taken it and notice swelling, hives, trouble breathing, or anything like your last reaction, get medical help right away.",
+      "cost": 0.016896
+    },
+    {
+      "q": "We're moving apartments next month, any tips?",
+      "expects": [
+        "movers"
+      ],
+      "mention_any": [
+        "late",
+        "last move",
+        "last time"
+      ],
+      "group": "fire",
+      "candidates": [
+        "movers"
+      ],
+      "pass": true,
+      "answer": "Here are some tips for next month:\n\n**Since your movers showed up 4 hours late last time:**\n- Book early and ask for the **first slot of the day**. Morning jobs are less likely to get pushed back by earlier moves running long.\n- Get the arrival window in writing, and ask what happens if they're late (some companies give a discount).\n- Call to confirm 2 days before and again the morning of the move.\n- Plan for a delay anyway. Don't schedule anything tight that day, and check whether you can get the old place's keys back a day later.\n\n**Planning**\n- Start packing rooms you rarely use now. Leave the kitchen and daily things for last week.\n- Label boxes with the room *and* what's inside. On one or two sides works better than on top.\n- Pack a \"first night\" box: toiletries, chargers, meds, sheets, a towel, a few dishes, snacks, toilet paper.\n- Take photos of how your electronics are wired before you unplug them.\n\n**Admin**\n- Move or start internet service early. Installation slots can fill up weeks ahead.\n- Update your address with USPS, your bank, your employer, and your subscriptions. In Colorado, you're supposed to update your driver's license address within 30 days.\n- Do a walkthrough with photos at both apartments. It protects your deposit.\n\n**Denver-specific**\n- Snow can show up in November, so keep an eye on the forecast and have a backup date in mind.\n- Ask both buildings about elevator reservations and truck parking or loading zones.\n\nWant me to help you make a week-by-week checklist?",
+      "cost": 0.02484
+    },
+    {
+      "q": "Got tickets to see a band at the stadium next weekend!",
+      "expects": [
+        "concert_phone"
+      ],
+      "mention_any": [
+        "phone"
+      ],
+      "group": "fire",
+      "candidates": [
+        "concert_phone"
+      ],
+      "pass": true,
+      "answer": "That's awesome, congrats! Who are you seeing?\n\nLast summer you lost your phone in the crowd at a stadium show. This time it could help to keep it in a zip-up or front pocket, or use a lanyard case. Also make sure Find My Device is turned on before you go, and screenshot your tickets in case you lose signal.",
+      "cost": 0.013988
+    },
+    {
+      "q": "Is it going to rain tomorrow?",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "snack",
+        "sushi",
+        "ibuprofen",
+        "charger",
+        "bus",
+        "movers",
+        "phone"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": true,
+      "answer": "Yes, probably. Tomorrow (Thu, Oct 15) Denver has a **58% chance of rain**, mostly drizzle, adding up to about 2 mm (under a tenth of an inch). It'll be cool, with a high around 10°C (50°F) and a low around 4°C (39°F). An umbrella or rain jacket would be a good idea.\n\nFriday looks dry and warmer, with a high around 17°C (63°F).\n\nI've saved this forecast source (Open-Meteo, a free weather service), so future weather questions will be quicker. It passed the quality check.",
+      "cost": 0.075112
+    },
+    {
+      "q": "What's a 15% tip on $64?",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "snack",
+        "sushi",
+        "ibuprofen",
+        "charger",
+        "bus",
+        "takeout"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": true,
+      "answer": "A 15% tip on $64 comes to **$9.60**, so you'd pay **$73.60** in total.",
+      "cost": 0.011076
+    },
+    {
+      "q": "How many miles is a marathon?",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "snack",
+        "sushi",
+        "ibuprofen",
+        "charger",
+        "bus"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": true,
+      "answer": "A marathon is **26.2 miles**, or 42.195 km. A half marathon is half that: 13.1 miles (21.1 km).",
+      "cost": 0.011268
+    },
+    {
+      "q": "Can you recommend some music for studying?",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "jazz",
+        "concert",
+        "phone"
+      ],
+      "group": "quiet_llm",
+      "candidates": [
+        "concert_phone"
+      ],
+      "pass": false,
+      "answer": "Here are some good options for studying, starting with jazz since you've asked for a jazz playlist before:\n\n**Jazz (calm, mostly instrumental)**\n- Bill Evans Trio: *Sunday at the Village Vanguard*\n- Miles Davis: *Kind of Blue*\n- Chet Baker or the Vince Guaraldi Trio, for something lighter\n\n**Lo-fi / chillhop**\n- Lofi Girl's \"beats to relax/study to\" stream\n- Nujabes: *Modal Soul*\n\n**Ambient**\n- Brian Eno: *Music for Airports*\n- Tycho: *Dive*\n- Hammock, for a softer, dreamy sound\n\n**Classical**\n- Bach: *Goldberg Variations* (the Glenn Gould recordings)\n- Erik Satie: *Gymnopédies*\n- Ólafur Arnalds or Max Richter, for modern minimalist pieces\n\n**Video game and film scores** (made to keep you focused without pulling your attention)\n- *Minecraft* by C418\n- *Stardew Valley*\n- Hans Zimmer: *Interstellar*\n\n**Tip:** Music without lyrics usually works best for reading or writing. Songs with words are fine for more routine tasks.\n\nWant me to focus on one style, or put together a longer list?",
+      "cost": 0.0326
+    },
+    {
+      "q": "It's Friday! What should I get for dinner?",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "usually order",
+        "takeout on fridays",
+        "sakura"
+      ],
+      "group": "quiet_filter",
+      "candidates": [
+        "sushi"
+      ],
+      "pass": false,
+      "answer": "Happy Friday! Since Friday is usually takeout night for you, here are some vegetarian ideas:\n\n- **Indian:** Chana masala, palak paneer or malai kofta with garlic naan. There are lots of vegetarian options and it travels well.\n- **Thai:** Pad see ew or green curry with tofu. Ask them to leave out fish sauce if you avoid it.\n- **Mexican:** Veggie burritos, or tacos with black beans or roasted sweet potato.\n- **Pizza:** Margherita or a loaded veggie pie, the classic Friday pick.\n- **Mediterranean:** A falafel plate with hummus, tabbouleh and warm pita.\n\nIf you're craving sushi, try somewhere other than Sakura Sushi on 5th Street, since that's where you got food poisoning. A veggie roll platter with avocado, cucumber and sweet potato tempura from another place could be good.\n\nWant me to find specific places in Denver for any of these?",
+      "cost": 0.032068
+    },
+    {
+      "q": "I'm searing a steak in my cast iron skillet tonight.",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "burn",
+        "handle"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": false,
+      "answer": "Sounds good! One thing first: last time you burned your hand on the cast iron handle, so keep a dry towel or handle cover on it the whole time. The handle gets about as hot as the pan.\n\nQuick searing tips:\n- **Dry it and salt it.** Pat the steak dry and salt it well, ideally 40+ minutes ahead or right before cooking.\n- **Get the pan very hot.** Preheat 5+ minutes over medium-high, then add a high smoke point oil like avocado or canola. Turn on the vent fan.\n- **Don't move it.** Leave it alone 2–4 minutes per side until a crust forms. For thick cuts, finish in the oven or flip it often.\n- **Use a thermometer.** Take it off around 125°F for medium-rare, since it keeps cooking as it rests.\n- **Baste at the end (optional).** In the last minute, add butter, garlic and thyme, and spoon the melted butter over the steak.\n- **Rest it** 5–10 minutes before slicing against the grain.\n\nAlso, I have you down as vegetarian. Are you cooking for someone else, or should I update that?",
+      "cost": 0.033348
+    },
+    {
+      "q": "Explain how airplane wings generate lift.",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "snack",
+        "starving",
+        "delayed"
+      ],
+      "group": "quiet_llm",
+      "candidates": [],
+      "pass": true,
+      "answer": "Wings make lift by **pushing air downward**. By Newton's third law, the air pushes the wing up. The shape of the wing and its tilt make this happen in a few connected ways.\n\n**1. Angle of attack**\nA wing meets the oncoming air tilted slightly upward. This is called the angle of attack. The tilt deflects air downward, much like your hand does when you hold it out of a car window. Even a flat plate makes lift this way.\n\n**2. The airfoil shape**\nA wing's cross-section is curved, with a rounded front and a sharp back edge. Air flowing over it tends to follow the curved surface (sometimes called the Coandă effect, though that's a loose label). So the air leaves the trailing edge angled downward. This downward flow behind the wing is called **downwash**.\n\n**3. Pressure differences (Bernoulli)**\nTurning the airflow creates a pressure difference:\n- **Above the wing:** air speeds up and its pressure drops.\n- **Below the wing:** air slows slightly and its pressure rises.\n\nThe higher pressure underneath and lower pressure on top push the wing upward. This is the same lift as in point 1, just described in terms of pressure instead of force on the air. Both descriptions are correct.\n\n**A common myth to ignore**\nMany textbooks say air over the top must travel farther and so has to \"meet up\" with the air underneath at the back edge. That's false. Air over the top actually arrives at the trailing edge *before* the air below. Nothing forces the two streams to rejoin at the same moment.\n\n**What affects how much lift you get**\nLift = ½ × air density × speed² × wing area × lift coefficient\n- **Speed** has the biggest effect: doubling it gives four times the lift.\n- **Air density:** thinner air means less lift. That's why planes need longer takeoff runs at high-altitude airports like Denver's.\n- **Wing area:** flaps and slats extend the wing and add curvature for slow flight during takeoff and landing.\n- **Angle of attack:** more tilt gives more lift, up to a point. Past about 15°, the air can no longer follow the top surface and breaks away. Lift then drops suddenly, which is called a **stall**.\n\n**In one sentence:** A tilted, curved wing turns the airflow downward, which creates low pressure above and higher pressure below, and that pressure difference holds the plane up.",
+      "cost": 0.026704
+    },
+    {
+      "q": "What's the history of the Wright brothers' first flight?",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "snack",
+        "starving",
+        "delayed"
+      ],
+      "group": "quiet_llm",
+      "candidates": [
+        "flight_snacks"
+      ],
+      "pass": true,
+      "answer": "On **December 17, 1903**, Orville and Wilbur Wright made the first controlled, sustained, powered flight in a heavier-than-air aircraft. It happened at Kill Devil Hills, near Kitty Hawk, North Carolina.\n\n**Background**\n- The brothers ran a bicycle shop in Dayton, Ohio. That work gave them mechanical skills and money for their experiments.\n- Otto Lilienthal's glider flights got them interested. They started serious work in 1899.\n- Their big breakthrough was **three-axis control**. \"Wing-warping\" twisted the wings to roll the plane, and a movable rudder steered it. Other inventors focused on engines, but the Wrights saw that control was the real problem.\n- They chose Kitty Hawk for its steady winds, soft sand for landings and privacy.\n\n**Getting there (1900–1902)**\n- They tested gliders there in 1900 and 1901. The 1901 glider did worse than expected, so they built their own wind tunnel back in Dayton. They tested about 200 wing shapes and corrected the flawed lift data others had published.\n- Their 1902 glider made hundreds of successful flights and solved the control problem.\n\n**The 1903 Flyer**\n- No engine maker could build one light and powerful enough, so their mechanic Charlie Taylor built one: about 12 horsepower, made mostly of aluminum.\n- They designed their own propellers, treating them as rotating wings.\n- Wilbur won a coin toss and tried first on December 14, but the plane stalled and was slightly damaged.\n\n**December 17, 1903**\n- **Flight 1:** Orville flew 120 feet (37 m) in 12 seconds. John T. Daniels of the nearby lifesaving station took the famous photo.\n- They made four flights that day, taking turns. The longest was Wilbur's: **852 feet (260 m) in 59 seconds**.\n- Then a gust of wind flipped the parked Flyer and wrecked it. It never flew again.\n\n**What happened next**\n- Few people noticed at first. The press mostly ignored or doubted them.\n- They kept improving the design near Dayton. By 1905 their Flyer III could fly for over 30 minutes and make turns and circles.\n- In 1908 Wilbur's public flights in France made them world-famous.\n- The original 1903 Flyer is on display at the Smithsonian's National Air and Space Museum in Washington, D.C.",
+      "cost": 0.027532
+    },
+    {
+      "q": "Should I bring snacks to my kid's soccer game?",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "flight",
+        "airport",
+        "delayed"
+      ],
+      "group": "quiet_llm",
+      "candidates": [
+        "flight_snacks"
+      ],
+      "pass": true,
+      "answer": "Yes, it's usually a good idea. A few things to think about:\n\n- **Check if it's your turn for team snacks.** Many youth leagues have a rotation where one family brings halftime or after-game snacks for the whole team. Look at the team schedule or ask the coach.\n- **For your own kid:** Bring water and something easy like orange slices, a banana, granola bars or pretzels. Kids are often starving after running around.\n- **For you:** Pack something for yourself too, especially if games run long or there are back-to-back matches. You know what it's like to get stuck hungry with nothing on hand. Bring something vegetarian, since concession stands don't always have good options.\n- **If you're feeding the team:** Check for allergies, especially nuts. Individually wrapped snacks are easiest.\n\nDo you know if there's a snack schedule for the team?",
+      "cost": 0.030576
+    },
+    {
+      "q": "Is sushi actually healthy?",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "sakura",
+        "food poisoning"
+      ],
+      "group": "quiet_llm",
+      "candidates": [
+        "sushi"
+      ],
+      "pass": true,
+      "answer": "It can be, but it depends a lot on what you order. Since you're vegetarian, here's how it works out for veggie sushi:\n\n**The good parts**\n- **Seaweed (nori)** has some iodine, fiber and minerals.\n- **Vegetables** like cucumber, avocado, asparagus, pickled radish and shiitake add fiber, and avocado adds healthy fats.\n- **Edamame, tofu and inari** (sweet fried tofu pockets) give you some protein, which plain veggie rolls are short on.\n- Plain rolls are fairly **low in calories**.\n\n**The not-so-good parts**\n- **White rice is most of the roll.** It's seasoned with sugar and vinegar, so you get a lot of refined carbs and not much protein. Rolls can leave you hungry again soon.\n- **Sodium adds up fast.** Soy sauce, pickled vegetables and seasoned rice all carry salt.\n- **Specialty rolls** with tempura, cream cheese, spicy mayo or sweet sauces can be as heavy as fast food.\n\n**Tips for a healthier order**\n- Ask for brown rice if they have it.\n- Add edamame, miso soup or a seaweed salad on the side.\n- Choose plain rolls (avocado, cucumber, oshinko) over tempura or mayo-heavy ones.\n- Use low-sodium soy sauce, and dip the fish-free side lightly.\n\n**Bottom line:** A plain veggie roll with edamame on the side is a decent, light meal. Mostly white rice plus fried or creamy rolls is more of a treat than a health food.",
+      "cost": 0.025868
+    }
+  ]
+}

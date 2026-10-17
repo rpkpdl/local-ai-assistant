@@ -7,10 +7,13 @@
   {"type": "tool_end", "id", "name", "output", "ms", "error"}
   {"type": "llm", "role", "model", "input_tokens", "output_tokens", "cache_read_tokens",
    "cache_write_tokens", "cost", "stop_reason", "ms"}      one API call finished;
-                                                           role is "agent" or "judge"
+                                                           role is "agent", "judge" or "memory"
   {"type": "notice", "text"}                               e.g. source check verdicts
+  {"type": "memory", "action", "text", "id"}               the librarian stored something;
+                                                           action is saved | updated | linked
   {"type": "error", "message"}
-  {"type": "done", "cost", "agent_cost", "judge_cost", "ms"}   always last; cost = total
+  {"type": "done", "cost", "agent_cost", "judge_cost", "memory_cost", "ms"}
+                                                           always last; cost = total
 """
 
 from __future__ import annotations
@@ -25,15 +28,15 @@ from collections.abc import Callable, Iterator
 
 import anthropic
 from anthropic import beta_tool
-from dotenv import load_dotenv
 
 from .judge import SourceJudge
-from .memory import JSONMemoryStore, MemoryStore, SQLiteMemoryStore
-from .tracing import setup_tracing, trace_tools, turn_span
+from .memory import MemoryStore
+from .memory.consolidate import consolidate, due
+from .memory.librarian import Librarian
+from .models import fallback_options
+from .tracing import in_caller_context, setup_tracing, trace_tools, turn_span
 from .web.search import BraveSearch
 from .web.tools import make_web_tools
-
-load_dotenv()  # reads ANTHROPIC_API_KEY etc. from .env
 
 # ASSISTANT_MODEL in .env picks the agent's model. Anything not starting with "claude-" is run
 # locally through Ollama's Anthropic-compatible API (e.g. gemma4:e4b). The source judge always
@@ -43,16 +46,33 @@ LOCAL = not MODEL.startswith("claude-")
 OLLAMA_URL = os.getenv("OLLAMA_URL") or "http://127.0.0.1:11434"
 EFFORT = "local" if LOCAL else "medium"  # low | medium | high | xhigh | max
 
+# After each turn the librarian decides what to store (one extra Claude call). "off" disables it.
+LIBRARIAN = (os.getenv("ASSISTANT_LIBRARIAN") or "on").lower() != "off"
+
 # $ per million tokens: input, output, cache read, cache write
-PRICES = {"claude-opus-5-5": (4.00, 20.00, 0.20, 5.00)}
+PRICES = {"claude-opus-5-5": (4.00, 20.00, 0.20, 5.00),
+          "claude-sonnet-5-5": (2.00, 10.00, 0.20, 2.50),
+          "claude-haiku-5-5": (0.10, 0.50, 0.01, 0.125)}
 
 SYSTEM = """You are a helpful personal assistant with long-term memory that persists across sessions.
 
-- When the user shares something durable about themselves (preferences, people, plans, facts, \
-recurring tasks), save it with `remember`. One fact per memory, written so it makes sense on its own.
-- Before answering anything that might depend on what you know about the user, use `recall`.
-- If a stored memory is wrong or outdated, `forget` it and `remember` the corrected version.
-- Don't save small talk or things only relevant to this conversation.
+Memory:
+- <user_profile> at the end of this prompt holds the core facts about the user (home city, diet, \
+people, tracked measurements). Use it directly: for "will it rain?", use their city without asking.
+- For anything else that might depend on the user, `recall` first. It's keyword search, so use \
+concrete words, and try different words if the first search finds nothing.
+- You don't save memories yourself. After each turn a separate librarian stores what's worth \
+keeping and updates outdated memories. If the user asks you to remember something, just \
+acknowledge it. If they ask you to forget something, `recall` it and `forget` it by id.
+- A message may carry <possibly_relevant_memories>: the user's own past experiences that matched \
+what they said. If one clearly helps with what they're doing right now, bring it up in a sentence, \
+specifically ("Last time your flight was delayed you were stuck hungry. Want to pack snacks?"). \
+That beats generic advice. If none clearly helps, ignore them without mentioning them.
+
+Tone: notice whether the user is getting a task done or talking about their life. If they seem \
+frustrated, slow down and simplify. If they seem in real distress, be warm and brief, don't act as \
+a therapist, and encourage them to reach out to people they trust or to professional or crisis \
+support. Support their connections with other people rather than replacing them.
 
 Answering questions that need current or external information (weather, prices, news, facts you're \
 unsure of):
@@ -76,17 +96,6 @@ Emit = Callable[[dict], None]
 
 def make_tools(store: MemoryStore):
     @beta_tool(eager_input_streaming=True)
-    def remember(content: str, tags: list[str] | None = None) -> str:
-        """Save a fact about the user to long-term memory.
-
-        Args:
-            content: The fact to remember, self-contained (e.g. "User's sister is named Maya").
-            tags: Optional short topic tags, e.g. ["family"] or ["work", "schedule"].
-        """
-        m = store.add(content, tags)
-        return f"Saved memory {m.id}."
-
-    @beta_tool(eager_input_streaming=True)
     def recall(query: str, limit: int = 5) -> str:
         """Search long-term memory for facts relevant to a query.
 
@@ -99,18 +108,32 @@ def make_tools(store: MemoryStore):
 
     @beta_tool(eager_input_streaming=True)
     def forget(memory_id: str) -> str:
-        """Delete a memory by its id (the 8-character id shown by recall).
+        """Delete a memory for good, when the user asks you to forget it. Also deletes the
+        older versions it replaced.
 
         Args:
-            memory_id: The id of the memory to delete.
+            memory_id: The id shown by recall or in the profile, e.g. "m12", or "r3" for a person.
         """
         return "Deleted." if store.delete(memory_id) else f"No memory with id {memory_id}."
 
-    return [remember, recall, forget]
+    return [recall, forget]
+
+
+def system_prompt(store: MemoryStore) -> list[dict] | str:
+    """The fixed prompt, then the profile in its own block (so the fixed part can be cached)."""
+    profile = f"<user_profile>\n{store.profile() or '(nothing stored yet)'}\n</user_profile>"
+    if LOCAL:
+        return f"{SYSTEM}\n\n{profile}"
+    return [{"type": "text", "text": SYSTEM}, {"type": "text", "text": profile}]
 
 
 def build_user_message(text: str, store: MemoryStore, auto_recall: bool) -> dict:
     content = [{"type": "text", "text": text}]
+    related = store.associate(text)
+    if related:
+        ctx = "\n".join(m.render() for m in related)
+        content.append({"type": "text", "text":
+                        f"<possibly_relevant_memories>\n{ctx}\n</possibly_relevant_memories>"})
     if auto_recall:
         hits = store.search(text, limit=5)
         if hits:
@@ -133,13 +156,14 @@ def cost_of(model: str, usage) -> float | None:
 
 
 class Agent:
-    def __init__(self, store_kind: str = "sqlite", auto_recall: bool = False,
-                 db_path: str | None = None):
+    def __init__(self, auto_recall: bool = False, db_path: str | None = None,
+                 librarian: bool = LIBRARIAN):
         db_path = db_path or os.getenv("ASSISTANT_DB") or "memories.db"
         self.tracing = setup_tracing()  # before any SQLite connection is opened
         # Connections are shared with the worker thread; turns are serialized by self._lock
-        self.store: MemoryStore = (SQLiteMemoryStore(db_path) if store_kind == "sqlite"
-                                   else JSONMemoryStore())
+        self.store = MemoryStore(db_path)
+        if due(self.store):
+            consolidate(self.store)
         self.db = sqlite3.connect(db_path, check_same_thread=False)
         try:
             search = BraveSearch(self.db)
@@ -153,8 +177,11 @@ class Agent:
             self.db, search, judge=SourceJudge(claude, on_usage=self._judge_usage),
             notify=lambda text: self._emit({"type": "notice", "text": text}))
         self.tools = self._with_events(trace_tools(make_tools(self.store) + web_tools))
+        self.librarian = (Librarian(claude, self.store, on_usage=self._librarian_usage)
+                          if librarian else None)
         self.auto_recall = auto_recall
         self.messages: list = []
+        self._last_user: str | None = None
         self._lock = threading.Lock()
         self._emit: Emit = lambda event: None
         self._tool_seq = 0
@@ -162,6 +189,7 @@ class Agent:
     def reset(self) -> None:
         with self._lock:
             self.messages = []
+            self._last_user = None
 
     def stream_turn(self, text: str) -> Iterator[dict]:
         """Run one turn in a worker thread and yield its events as they happen."""
@@ -176,7 +204,7 @@ class Agent:
                     self._emit = lambda event: None
                     events.put(None)
 
-        threading.Thread(target=worker, daemon=True).start()
+        threading.Thread(target=in_caller_context(worker), daemon=True).start()
         while (event := events.get()) is not None:
             yield event
 
@@ -184,13 +212,15 @@ class Agent:
 
     def _run_turn(self, text: str) -> None:
         start, t0 = len(self.messages), time.time()
-        self._costs = {"agent": 0.0, "judge": 0.0}
-        self.messages.append(build_user_message(text, self.store, self.auto_recall))
+        self._costs = {"agent": 0.0, "judge": 0.0, "memory": 0.0}
         try:
+            self.messages.append(build_user_message(text, self.store, self.auto_recall))
             with turn_span(text) as span:
                 reply = self._loop()
                 if span is not None:
                     span.set_output(reply)
+                if self.librarian is not None:
+                    self._remember(text, start)  # inside the turn, so its trace nests under it
         except anthropic.AuthenticationError:
             self._fail(start, "Authentication failed - check ANTHROPIC_API_KEY in .env.")
         except anthropic.RateLimitError:
@@ -205,7 +235,25 @@ class Agent:
         self._emit({"type": "done", "cost": round(sum(self._costs.values()), 6),
                     "agent_cost": round(self._costs["agent"], 6),
                     "judge_cost": round(self._costs["judge"], 6),
+                    "memory_cost": round(self._costs["memory"], 6),
                     "ms": int((time.time() - t0) * 1000)})
+
+    def _remember(self, text: str, start: int) -> None:
+        """Let the librarian store what's worth keeping from this turn. Never fails the turn."""
+        reply = "\n\n".join(
+            b.text for msg in self.messages[start:] if msg["role"] == "assistant"
+            for b in msg["content"] if getattr(b, "type", None) == "text" and b.text.strip())
+        try:
+            saved = self.librarian(text, reply, previous_user=self._last_user)
+            if self.librarian.error:
+                self._emit({"type": "notice",
+                            "text": f"Memory not updated: {self.librarian.error}"})
+        except Exception as e:  # a memory failure shouldn't lose the answer
+            self._emit({"type": "notice", "text": f"Memory update failed: {e!r}"})
+            saved = []
+        for s in saved:
+            self._emit({"type": "memory", "action": s.action, "text": s.text, "id": s.id})
+        self._last_user = text
 
     def _fail(self, start: int, message: str) -> None:
         del self.messages[start:]  # drop the failed turn so history stays valid
@@ -216,16 +264,11 @@ class Agent:
             # Gemma reasons before every reply unless told not to; off is ~3x faster on CPU
             options = {"thinking": {"type": "disabled"}}
         else:
-            options = {
-                "output_config": {"effort": EFFORT},
-                # Server-side fallback: if a request is declined, the API retries it on a suitable model.
-                "betas": ["server-side-fallback-2026-07-01"],
-                "fallbacks": "default",
-            }
+            options = {"output_config": {"effort": EFFORT}, **fallback_options(MODEL)}
         runner = self.client.beta.messages.tool_runner(
             model=MODEL,
             max_tokens=16000,
-            system=SYSTEM,
+            system=system_prompt(self.store),
             tools=self.tools,
             messages=self.messages,
             stream=True,
@@ -263,6 +306,9 @@ class Agent:
 
     def _judge_usage(self, message, ms: int) -> None:
         self._record_llm("judge", message, ms)
+
+    def _librarian_usage(self, message, ms: int) -> None:
+        self._record_llm("memory", message, ms)
 
     def _record_llm(self, role: str, message, ms: int) -> None:
         """Add one API call's cost to the turn total and report it."""

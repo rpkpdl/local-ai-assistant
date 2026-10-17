@@ -76,7 +76,9 @@ def reset(request: Request):
 
 @app.get("/api/memories")
 def memories():
-    return [{"id": m.id, "content": m.content, "tags": m.tags, "created_at": m.created_at}
+    return [{"id": f"m{m.id}", "content": m.content, "kind": m.kind, "attribute": m.attribute,
+             "entity": None if m.entity_type == "user" else m.entity, "tags": m.theme.split(",")
+             if m.theme else [], "salience": m.salience, "created_at": m.recorded_at}
             for m in agent.store.all()]
 
 

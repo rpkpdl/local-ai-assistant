@@ -1,0 +1,398 @@
+{
+  "eval": "memory_associate_agent_enriched",
+  "model": "gemma4:e4b",
+  "librarian_model": "claude-opus-5-5",
+  "date": "2026-10-14",
+  "cost": 0.033,
+  "summary": {
+    "fire": {
+      "pass": "10/11"
+    },
+    "quiet_filter": {
+      "pass": "5/5"
+    },
+    "quiet_llm": {
+      "pass": "2/5"
+    },
+    "all": {
+      "pass": "17/21"
+    }
+  },
+  "rows": [
+    {
+      "q": "I'm flying to Portland next week.",
+      "expects": [
+        "flight_snacks"
+      ],
+      "mention_any": [
+        "snack",
+        "hungry",
+        "starving",
+        "food"
+      ],
+      "group": "fire",
+      "candidates": [
+        "flight_snacks"
+      ],
+      "pass": true,
+      "answer": "I see you're flying to Portland next week. Last time your flight was delayed you were stuck hungry at the airport with no snacks. Would you like some suggestions for packing snacks for your trip?",
+      "cost": 0.0
+    },
+    {
+      "q": "Heading to the airport now!",
+      "expects": [
+        "flight_snacks"
+      ],
+      "mention_any": [
+        "snack",
+        "hungry",
+        "starving",
+        "food"
+      ],
+      "group": "fire",
+      "candidates": [
+        "flight_snacks"
+      ],
+      "pass": true,
+      "answer": "Last time your flight was delayed you were stuck hungry. Want to pack snacks? Safe travels, and I hope your trip goes smoothly!",
+      "cost": 0.0
+    },
+    {
+      "q": "Booking a trip to Chicago. Is the red-eye flight worth it to save money?",
+      "expects": [
+        "flight_snacks",
+        "bus_sleep"
+      ],
+      "mention_any": [
+        "snack",
+        "hungry",
+        "starving",
+        "bus",
+        "couldn't sleep",
+        "didn't sleep"
+      ],
+      "group": "fire",
+      "candidates": [
+        "flight_snacks",
+        "bus_sleep",
+        "charger"
+      ],
+      "pass": true,
+      "answer": "To give you the best advice on whether a red-eye flight to Chicago is worth it to save money, I need a bit more information. \"Worth it\" depends on your priorities!\n\nCould you tell me more about:\n\n1.  **The flight details?** (e.g., the specific times, airlines, and price difference between the red-eye and a daytime flight).\n2.  **Your priorities for the trip?** (Are you prioritizing saving money, getting maximum rest, or something else?)\n\nAlso, last time your flight was delayed you were stuck hungry at the airport with no snacks, so maybe planning for food or being prepared for delays is a good idea!",
+      "cost": 0.0
+    },
+    {
+      "q": "Thinking of taking the night bus to Boston to save some money.",
+      "expects": [
+        "bus_sleep"
+      ],
+      "mention_any": [
+        "last time",
+        "couldn't sleep",
+        "didn't sleep",
+        "never again",
+        "coast"
+      ],
+      "group": "fire",
+      "candidates": [
+        "bus_sleep"
+      ],
+      "pass": true,
+      "answer": "Considering your past experience where you couldn't sleep well on an overnight bus to the coast, you might want to think carefully about taking a night bus to Boston.\n\nAre you looking for information on bus schedules, prices, or anything else about the trip?",
+      "cost": 0.0
+    },
+    {
+      "q": "Where should we go for sushi on Friday?",
+      "expects": [
+        "sushi"
+      ],
+      "mention_any": [
+        "sakura",
+        "food poisoning"
+      ],
+      "group": "fire",
+      "candidates": [
+        "sushi"
+      ],
+      "pass": true,
+      "answer": "I see you're looking for sushi recommendations for Friday! I want to make sure you have a great meal.\n\nLast time, you mentioned having food poisoning from Sakura Sushi on 5th Street, so I'll make sure to avoid that one.\n\nSince I don't have any memory of your favorite types of sushi or what neighborhood you'd like to go to, could you give me a little more information? For example:\n\n1.  **What area are you in?** (Downtown, specific neighborhood, etc.)\n2.  **What kind of vibe are you looking for?** (Casual/cheap, upscale/romantic, etc.)\n\nOnce I know a bit more, I can look up some highly-rated options for you!",
+      "cost": 0.0
+    },
+    {
+      "q": "Let's order from Sakura tonight.",
+      "expects": [
+        "sushi"
+      ],
+      "mention_any": [
+        "food poisoning",
+        "sick",
+        "won't go back"
+      ],
+      "group": "fire",
+      "candidates": [
+        "sushi"
+      ],
+      "pass": true,
+      "answer": "I see that last time you tried Sakura Sushi, you had some food poisoning. Given that past experience, are you sure you want to order from Sakura tonight?",
+      "cost": 0.0
+    },
+    {
+      "q": "Big client presentation in Dallas on Tuesday, I'm packing tonight.",
+      "expects": [
+        "charger"
+      ],
+      "allowed": [
+        "flight_snacks"
+      ],
+      "mention_any": [
+        "charger"
+      ],
+      "group": "fire",
+      "candidates": [
+        "charger",
+        "movers",
+        "flight_snacks"
+      ],
+      "pass": false,
+      "answer": "It sounds like you have a busy evening ahead preparing for your presentation in Dallas! Since you're packing tonight, is there anything specific I can help you look up for your trip? For example, flight information, local dining ideas, or anything else?",
+      "cost": 0.0
+    },
+    {
+      "q": "I have a terrible headache, which painkiller should I take?",
+      "expects": [
+        "ibuprofen"
+      ],
+      "mention_any": [
+        "ibuprofen",
+        "reaction"
+      ],
+      "group": "fire",
+      "candidates": [
+        "ibuprofen"
+      ],
+      "pass": true,
+      "answer": "I'm sorry to hear you have a terrible headache. I am an AI and not a medical professional, so I cannot recommend any painkillers for you.\n\nGiven that you previously had a bad reaction to ibuprofen, it would be very important to speak with a doctor or pharmacist who knows your medical history. They can give you safe and appropriate advice. Please reach out to a trusted healthcare provider or a local medical hotline for help right now.",
+      "cost": 0.0
+    },
+    {
+      "q": "About to take some Advil for my back.",
+      "expects": [
+        "ibuprofen"
+      ],
+      "mention_any": [
+        "ibuprofen",
+        "reaction",
+        "urgent care"
+      ],
+      "group": "fire",
+      "candidates": [
+        "ibuprofen"
+      ],
+      "pass": true,
+      "answer": "Since you mentioned taking Advil (which contains ibuprofen), I want to bring up something from your past. Last time you took ibuprofen, you had a bad reaction and ended up in urgent care.\n\nIf you are concerned about how Advil might affect you, it might be a good idea to check with a doctor or pharmacist before taking it.",
+      "cost": 0.0
+    },
+    {
+      "q": "We're moving apartments next month, any tips?",
+      "expects": [
+        "movers"
+      ],
+      "mention_any": [
+        "late",
+        "last move",
+        "last time"
+      ],
+      "group": "fire",
+      "candidates": [
+        "movers"
+      ],
+      "pass": true,
+      "answer": "Moving can definitely be stressful! Last time your apartment moved, the movers showed up 4 hours late, so maybe having a solid plan will help ease the stress this time.\n\nTo give you the best tips, could you tell me a little more about what kind of help you're looking for? Are you focused on:\n\n1.  **Packing?** (e.g., how to pack fragile items, best supplies)\n2.  **Logistics?** (e.g., hiring movers, timing, moving day timeline)\n3.  **Post-Move?** (e.g., setting up utilities, unpacking tips)",
+      "cost": 0.0
+    },
+    {
+      "q": "Got tickets to see a band at the stadium next weekend!",
+      "expects": [
+        "concert_phone"
+      ],
+      "mention_any": [
+        "phone"
+      ],
+      "group": "fire",
+      "candidates": [
+        "concert_phone"
+      ],
+      "pass": true,
+      "answer": "That sounds exciting! Which band are you going to see?\n\nI see from your past that you lost your phone in the crowd at a stadium concert last summer. Do you want to make a plan for keeping your belongings safe this time?",
+      "cost": 0.0
+    },
+    {
+      "q": "Is it going to rain tomorrow?",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "snack",
+        "sushi",
+        "ibuprofen",
+        "charger",
+        "bus",
+        "movers",
+        "phone"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": true,
+      "answer": "I am sorry, I was unable to find a current weather forecast for Denver, Colorado. I don't have the ability to access live external weather APIs right now. You might want to check a dedicated weather website or app for the most up-to-date information on rain tomorrow.",
+      "cost": 0.0
+    },
+    {
+      "q": "What's a 15% tip on $64?",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "snack",
+        "sushi",
+        "ibuprofen",
+        "charger",
+        "bus",
+        "takeout"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": true,
+      "answer": "A 15% tip on $64 is $9.60.",
+      "cost": 0.0
+    },
+    {
+      "q": "How many miles is a marathon?",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "snack",
+        "sushi",
+        "ibuprofen",
+        "charger",
+        "bus"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": true,
+      "answer": "A standard marathon is **26.2 miles** (or 42.195 kilometers).",
+      "cost": 0.0
+    },
+    {
+      "q": "Can you recommend some music for studying?",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "jazz",
+        "concert",
+        "phone"
+      ],
+      "group": "quiet_llm",
+      "candidates": [
+        "concert_phone"
+      ],
+      "pass": true,
+      "answer": "I can certainly recommend some music for studying! To give you the best suggestions, could you tell me what kind of music you usually enjoy? For example, do you prefer instrumental, lo-fi, classical, ambient, or something else?",
+      "cost": 0.0
+    },
+    {
+      "q": "It's Friday! What should I get for dinner?",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "usually order",
+        "takeout on fridays",
+        "sakura"
+      ],
+      "group": "quiet_filter",
+      "candidates": [
+        "sushi"
+      ],
+      "pass": true,
+      "answer": "Since it's Friday, are you in the mood for anything specific? Knowing if you want something quick, healthy, comfort food, or perhaps something new might help!\n\nAlso, just a reminder, since you're vegetarian, I can suggest some great vegetarian options!",
+      "cost": 0.0
+    },
+    {
+      "q": "I'm searing a steak in my cast iron skillet tonight.",
+      "expects": [],
+      "gate": "filter",
+      "must_not_mention": [
+        "burn",
+        "handle"
+      ],
+      "group": "quiet_filter",
+      "candidates": [],
+      "pass": true,
+      "answer": "That sounds delicious! Are you looking for a recipe, cooking tips, or something else?",
+      "cost": 0.0
+    },
+    {
+      "q": "Explain how airplane wings generate lift.",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "snack",
+        "starving",
+        "delayed"
+      ],
+      "group": "quiet_llm",
+      "candidates": [],
+      "pass": true,
+      "answer": "Airplane wings generate lift primarily due to the shape of the wing, known as an **airfoil**, and the movement of air across its surface. This process is a direct application of fundamental physics principles, most notably **Bernoulli's Principle** and **Newton's Laws of Motion**.\n\nHere is a breakdown of the two main ways this is explained:\n\n### 1. Bernoulli's Principle (Pressure Difference)\n\nThe airfoil is usually shaped so that the top surface is more curved (cambered) than the bottom surface.\n\n*   **Airflow Acceleration:** As the wing moves through the air, the air splits around the wing. Because the top surface is more curved, the air traveling over the top must travel a longer distance in the same amount of time as the air traveling underneath. This forces the air moving over the top to **speed up**.\n*   **Pressure Drop:** According to Bernoulli's Principle, as the speed of a fluid (like air) increases, its internal pressure decreases. Therefore, the air moving quickly over the top of the wing creates an area of **low pressure**.\n*   **Lift Creation:** Meanwhile, the air moving underneath the wing moves slower, resulting in a higher pressure area. The difference between the high pressure underneath and the low pressure on top creates a net **upward force**—this is lift.\n\n### 2. Newton's Laws of Motion (Deflection)\n\nThis explanation focuses on the deflection of air, which is governed by Newton's Third Law (for every action, there is an equal and opposite reaction).\n\n*   **Angle of Attack:** When the wing is tilted slightly upward relative to the oncoming airflow (this is called the \"angle of attack\"), it forces the airflow downward.\n*   **Action and Reaction:** The wing is essentially pushing a large mass of air *downward* (the action). In reaction, the air pushes the wing *upward* (the lift). This downward deflection of air is known as \"downwash.\"\n\n### In Summary\n\nMost modern explanations view lift as a combination of both effects:\n\n*   The **shape (airfoil)** is optimized to create the necessary **pressure difference (Bernoulli)**.\n*   The **angle of attack** ensures that the wing actively pushes air **downward (Newton)**, which generates the opposing upward force.",
+      "cost": 0.0
+    },
+    {
+      "q": "What's the history of the Wright brothers' first flight?",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "snack",
+        "starving",
+        "delayed"
+      ],
+      "group": "quiet_llm",
+      "candidates": [
+        "flight_snacks"
+      ],
+      "pass": false,
+      "answer": "I am sorry, but it seems I do not have the necessary tool to look up the history of the Wright brothers' first flight right now.\n\nSpeaking of delays, last time your flight was delayed, you were stuck hungry at the airport with no snacks. Want to pack some for your next journey?",
+      "cost": 0.0
+    },
+    {
+      "q": "Should I bring snacks to my kid's soccer game?",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "flight",
+        "airport",
+        "delayed"
+      ],
+      "group": "quiet_llm",
+      "candidates": [
+        "concert_phone",
+        "flight_snacks"
+      ],
+      "pass": false,
+      "answer": "Last time your flight was delayed you were stuck hungry. Want to pack snacks?\n\nIt's always a good idea to bring snacks for a soccer game, especially if it's going to take a while!",
+      "cost": 0.0
+    },
+    {
+      "q": "Is sushi actually healthy?",
+      "expects": [],
+      "gate": "llm",
+      "must_not_mention": [
+        "sakura",
+        "food poisoning"
+      ],
+      "group": "quiet_llm",
+      "candidates": [
+        "sushi"
+      ],
+      "pass": false,
+      "answer": "As a personal assistant, I don't have the necessary live information to give you a definitive, scientifically backed answer on whether sushi is \"healthy,\" as nutritional content varies widely depending on the ingredients, preparation, and sauces.\n\nHowever, I see from our memory that **you had a negative experience with Sakura Sushi on 5th Street and won't be going back.**\n\nIn general, sushi *can* be a healthy option because it often contains fish rich in omega-3 fatty acids. However, it can also be high in calories, sodium, and unhealthy fats depending on:\n*   **The filling:** Rich sauces, tempura, and cream cheese add calories and fat.\n*   **The type of fish:** Some fish are leaner than others.\n*   **How it's prepared:** Fried rolls vs. raw fish rolls.\n\nIf you are looking for healthy options, often lighter rolls featuring fresh, raw fish and vegetables are the best bet!",
+      "cost": 0.0
+    }
+  ]
+}

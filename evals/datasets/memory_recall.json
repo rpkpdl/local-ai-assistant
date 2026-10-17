@@ -1,5 +1,5 @@
 {
-  "description": "Seed facts plus questions that need one of them. 'direct' questions share a keyword with the fact; 'paraphrase' questions don't, which is where keyword search is expected to fail.",
+  "description": "Seed facts plus questions that need one of them. 'direct' questions share a keyword with the fact; 'paraphrase' questions don't, which is where keyword search is expected to fail. Plain-string memories are stored the way old memories were (no attribute, no keywords), like rows migrated from the first schema. Structured ones set kind/attribute/value and may supersede an older memory. 'updated' questions must find the newer fact and not the 'stale' one. 'series' questions with 'rank1' need the expected point ranked first. 'profile' questions need a fact the user never mentions, which only the always-in-context profile can supply.",
   "memories": {
     "tea": "User drinks green tea every morning, no sugar",
     "sister": "User's sister is named Maya and lives in Seattle",
@@ -15,7 +15,14 @@
     "music": "User's favorite band is Radiohead",
     "standup": "User has a team standup at 9:30 every weekday",
     "anniversary": "User's wedding anniversary is June 2",
-    "book": "User is currently reading Project Hail Mary"
+    "book": "User is currently reading Project Hail Mary",
+    "gym_old": {"content": "User's gym is Iron Works on Main Street", "kind": "fact", "attribute": "gym"},
+    "gym_new": {"content": "User switched gyms to Peak Fitness downtown", "kind": "fact", "attribute": "gym", "supersedes": "gym_old"},
+    "phone_old": {"content": "User has an iPhone 12", "kind": "fact", "attribute": "phone"},
+    "phone_new": {"content": "User upgraded to a Pixel 9 phone", "kind": "fact", "attribute": "phone", "supersedes": "phone_old"},
+    "w1": {"content": "User weighed 84.0 kg", "kind": "series_point", "attribute": "weight", "value": "84.0", "occurred_at": "2026-08-01"},
+    "w2": {"content": "User weighed 83.1 kg", "kind": "series_point", "attribute": "weight", "value": "83.1", "occurred_at": "2026-09-01"},
+    "w3": {"content": "User weighed 82.2 kg", "kind": "series_point", "attribute": "weight", "value": "82.2", "occurred_at": "2026-10-01"}
   },
   "questions": [
     {"q": "Do I take sugar in my green tea?", "expects": "tea", "type": "direct", "answer_any": ["no sugar", "without sugar", "don't take sugar", "do not take sugar"]},
@@ -39,6 +46,14 @@
     {"q": "Who is my favorite band?", "expects": "music", "type": "direct", "answer_any": ["radiohead"]},
     {"q": "What time is my standup?", "expects": "standup", "type": "direct", "answer_any": ["9:30"]},
     {"q": "When did I get married?", "expects": "anniversary", "type": "paraphrase", "answer_any": ["june 2"]},
-    {"q": "What novel am I in the middle of?", "expects": "book", "type": "paraphrase", "answer_any": ["hail mary"]}
+    {"q": "What novel am I in the middle of?", "expects": "book", "type": "paraphrase", "answer_any": ["hail mary"]},
+    {"q": "Which gym do I go to?", "expects": "gym_new", "stale": "gym_old", "type": "updated", "answer_any": ["peak fitness"]},
+    {"q": "Where do I work out these days?", "expects": "gym_new", "stale": "gym_old", "type": "updated", "answer_any": ["peak fitness"]},
+    {"q": "What phone do I have?", "expects": "phone_new", "stale": "phone_old", "type": "updated", "answer_any": ["pixel"]},
+    {"q": "What's my current weight?", "expects": "w3", "rank1": true, "type": "series", "answer_any": ["82.2"]},
+    {"q": "How much weight have I lost since August?", "expects": "w1", "type": "series", "answer_any": ["1.8"]},
+    {"q": "When is it going to rain?", "expects": "city", "type": "profile", "answer_any": ["austin"]},
+    {"q": "Find me a good coffee shop nearby.", "expects": "city", "type": "profile", "answer_any": ["austin"]},
+    {"q": "What should I make for dinner tonight?", "expects": "diet", "type": "profile", "answer_any": ["vegetarian", "meatless", "plant-based"]}
   ]
 }

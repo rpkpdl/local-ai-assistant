@@ -1,0 +1,495 @@
+{
+  "eval": "memory_agent_enriched",
+  "model": "claude-opus-5-5",
+  "librarian_model": "claude-opus-5-5",
+  "date": "2026-10-14",
+  "cost": 0.5777,
+  "summary": {
+    "direct": {
+      "hit": "10/10",
+      "answered": "10/10"
+    },
+    "paraphrase": {
+      "hit": "12/12",
+      "answered": "12/12"
+    },
+    "updated": {
+      "hit": "3/3",
+      "answered": "3/3"
+    },
+    "series": {
+      "hit": "2/2",
+      "answered": "2/2"
+    },
+    "profile": {
+      "hit": "3/3",
+      "answered": "0/3"
+    },
+    "all": {
+      "hit": "30/30",
+      "answered": "27/30"
+    }
+  },
+  "rows": [
+    {
+      "q": "Do I take sugar in my green tea?",
+      "expects": "tea",
+      "type": "direct",
+      "answer_any": [
+        "no sugar",
+        "without sugar",
+        "don't take sugar",
+        "do not take sugar"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [
+        "tea"
+      ],
+      "answer": "I have it saved that you drink green tea every morning with no sugar.",
+      "cost": 0.026656,
+      "error": null
+    },
+    {
+      "q": "What's my usual hot beverage?",
+      "expects": "tea",
+      "type": "paraphrase",
+      "answer_any": [
+        "green tea"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [
+        "tea"
+      ],
+      "answer": "Your usual is green tea with no sugar. You drink it every morning.",
+      "cost": 0.026804,
+      "error": null
+    },
+    {
+      "q": "Where does Maya live?",
+      "expects": "sister",
+      "type": "direct",
+      "answer_any": [
+        "seattle"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "Your sister Maya lives in Seattle.",
+      "cost": 0.012736,
+      "error": null
+    },
+    {
+      "q": "Does my sibling live on the west coast?",
+      "expects": "sister",
+      "type": "paraphrase",
+      "answer_any": [
+        "seattle"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "Yes. Your sister Maya lives in Seattle, Washington, which is on the West Coast in the Pacific Northwest.",
+      "cost": 0.014316,
+      "error": null
+    },
+    {
+      "q": "What is Biscuit's breed?",
+      "expects": "dog",
+      "type": "direct",
+      "answer_any": [
+        "golden retriever"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "Biscuit is a golden retriever.",
+      "cost": 0.012708,
+      "error": null
+    },
+    {
+      "q": "What kind of pet do I have?",
+      "expects": "dog",
+      "type": "paraphrase",
+      "answer_any": [
+        "golden retriever",
+        "dog"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "You have a golden retriever named Biscuit.",
+      "cost": 0.012744,
+      "error": null
+    },
+    {
+      "q": "Am I allergic to anything?",
+      "expects": "allergy",
+      "type": "direct",
+      "answer_any": [
+        "peanut"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [
+        "allergy"
+      ],
+      "answer": "Yes. According to my notes, you're allergic to peanuts. That's the only allergy I have saved.",
+      "cost": 0.027924,
+      "error": null
+    },
+    {
+      "q": "Which foods should I avoid eating?",
+      "expects": "allergy",
+      "type": "paraphrase",
+      "answer_any": [
+        "peanut"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [
+        "allergy",
+        "diet",
+        "tea",
+        "w2",
+        "w3"
+      ],
+      "answer": "Based on what I know about you, here's what to avoid:\n\n**Peanuts (allergy):** This one matters most.\n- Peanuts, peanut butter, peanut oil and peanut flour\n- Satay sauce, many Thai, Indonesian and West African dishes, and some curries and stir-fries\n- Trail mix, granola, some protein or energy bars, and some cookies and candy\n- Foods labeled \"may contain peanuts\" or made in a facility that handles peanuts\n- Hidden sources like some vegetarian chili or veggie burgers, mole sauce and \"ground nuts\"\n\n**Meat and fish (vegetarian):**\n- Meat, poultry, fish and seafood\n- Less obvious ones: gelatin (in gummies, marshmallows and some yogurts), animal rennet in some cheeses like traditional Parmesan, fish or oyster sauce, anchovies in Caesar dressing and Worcestershire sauce, and broth made from meat\n\nWhen you eat out, tell the staff about the peanut allergy directly, since kitchens can mix up ingredients. If you have other foods to avoid that I don't know about, let me know and I'll remember them.",
+      "cost": 0.035464,
+      "error": null
+    },
+    {
+      "q": "What industry is my company in?",
+      "expects": "job",
+      "type": "direct",
+      "answer_any": [
+        "logistics"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "Your company is in **logistics**. You work there as a data engineer.",
+      "cost": 0.013316,
+      "error": null
+    },
+    {
+      "q": "What do I do for a living?",
+      "expects": "job",
+      "type": "paraphrase",
+      "answer_any": [
+        "data engineer"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "You work as a data engineer at a logistics company.",
+      "cost": 0.013256,
+      "error": null
+    },
+    {
+      "q": "When is my birthday?",
+      "expects": "birthday",
+      "type": "direct",
+      "answer_any": [
+        "march 14"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "Your birthday is March 14.",
+      "cost": 0.012952,
+      "error": null
+    },
+    {
+      "q": "What day was I born?",
+      "expects": "birthday",
+      "type": "paraphrase",
+      "answer_any": [
+        "march 14"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [
+        "birthday"
+      ],
+      "answer": "Your birthday is **March 14**. I don't have your birth year saved, so I can't tell you which day of the week it fell on. Tell me the year and I'll work it out.",
+      "cost": 0.028476,
+      "error": null
+    },
+    {
+      "q": "What year is my Honda?",
+      "expects": "car",
+      "type": "direct",
+      "answer_any": [
+        "2019"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "Your Honda Civic is a 2019 model.",
+      "cost": 0.012756,
+      "error": null
+    },
+    {
+      "q": "What vehicle do I own?",
+      "expects": "car",
+      "type": "paraphrase",
+      "answer_any": [
+        "civic"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "You drive a 2019 Honda Civic.",
+      "cost": 0.01396,
+      "error": null
+    },
+    {
+      "q": "Which days do I work out?",
+      "expects": "gym",
+      "type": "paraphrase",
+      "answer_any": [
+        "monday"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "You work out on **Monday, Wednesday, and Friday evenings** at Peak Fitness downtown.",
+      "cost": 0.014376,
+      "error": null
+    },
+    {
+      "q": "How am I learning Spanish?",
+      "expects": "language",
+      "type": "direct",
+      "answer_any": [
+        "duolingo"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [
+        "language"
+      ],
+      "answer": "You're learning Spanish with Duolingo, according to what I have saved.",
+      "cost": 0.02672,
+      "error": null
+    },
+    {
+      "q": "Which state is my home in?",
+      "expects": "city",
+      "type": "paraphrase",
+      "answer_any": [
+        "texas"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "You live in Austin, so your home state is Texas.",
+      "cost": 0.012756,
+      "error": null
+    },
+    {
+      "q": "Can I order a steak for dinner?",
+      "expects": "diet",
+      "type": "paraphrase",
+      "answer_any": [
+        "vegetarian"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "Of course you can! But my notes say you're vegetarian, so I'm checking in case that's changed. If you're still vegetarian, I can help you find a good meatless option, like a portobello or cauliflower \"steak,\" or a veggie-friendly place in Austin that delivers. If you've started eating meat again, just tell me and I'll update my notes.\n\nEither way, your notes also say you're allergic to peanuts, so check the sauces and marinades.",
+      "cost": 0.017192,
+      "error": null
+    },
+    {
+      "q": "Who is my favorite band?",
+      "expects": "music",
+      "type": "direct",
+      "answer_any": [
+        "radiohead"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "Your favorite band is Radiohead.",
+      "cost": 0.01306,
+      "error": null
+    },
+    {
+      "q": "What time is my standup?",
+      "expects": "standup",
+      "type": "direct",
+      "answer_any": [
+        "9:30"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "Your team standup is at 9:30 every weekday.",
+      "cost": 0.012772,
+      "error": null
+    },
+    {
+      "q": "When did I get married?",
+      "expects": "anniversary",
+      "type": "paraphrase",
+      "answer_any": [
+        "june 2"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [
+        "anniversary"
+      ],
+      "answer": "I know your wedding anniversary is **June 2**, but I don't have the year you got married saved. If you tell me, I can keep it for next time.",
+      "cost": 0.027756,
+      "error": null
+    },
+    {
+      "q": "What novel am I in the middle of?",
+      "expects": "book",
+      "type": "paraphrase",
+      "answer_any": [
+        "hail mary"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "You're in the middle of **Project Hail Mary** by Andy Weir.",
+      "cost": 0.013728,
+      "error": null
+    },
+    {
+      "q": "Which gym do I go to?",
+      "expects": "gym_new",
+      "stale": "gym_old",
+      "type": "updated",
+      "answer_any": [
+        "peak fitness"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "You go to **Peak Fitness** downtown. You switched there from your old gym, and you usually go Monday, Wednesday and Friday evenings.",
+      "cost": 0.01392,
+      "error": null
+    },
+    {
+      "q": "Where do I work out these days?",
+      "expects": "gym_new",
+      "stale": "gym_old",
+      "type": "updated",
+      "answer_any": [
+        "peak fitness"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "You work out at **Peak Fitness downtown** (you switched there from your old gym). You usually go Monday, Wednesday, and Friday evenings.",
+      "cost": 0.0145,
+      "error": null
+    },
+    {
+      "q": "What phone do I have?",
+      "expects": "phone_new",
+      "stale": "phone_old",
+      "type": "updated",
+      "answer_any": [
+        "pixel"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [],
+      "answer": "You have a **Pixel 9**. You upgraded to it recently.",
+      "cost": 0.013512,
+      "error": null
+    },
+    {
+      "q": "What's my current weight?",
+      "expects": "w3",
+      "rank1": true,
+      "type": "series",
+      "answer_any": [
+        "82.2"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [
+        "gym",
+        "gym_new",
+        "w1",
+        "w2",
+        "w3"
+      ],
+      "answer": "Your last logged weight was **82.2 kg**, on October 1, 2026.\n\nThat's down from 84.0 kg on August 1 and 83.1 kg on September 1, so you've lost 1.8 kg over two months. If you've weighed yourself since then, tell me the number and I'll log it.",
+      "cost": 0.030004,
+      "error": null
+    },
+    {
+      "q": "How much weight have I lost since August?",
+      "expects": "w1",
+      "type": "series",
+      "answer_any": [
+        "1.8"
+      ],
+      "hit": true,
+      "answered": true,
+      "recalled": [
+        "gym",
+        "gym_new",
+        "w1",
+        "w2",
+        "w3"
+      ],
+      "answer": "You've lost **1.8 kg** since August, going from 84.0 kg to 82.2 kg:\n\n- Aug 1: 84.0 kg\n- Sep 1: 83.1 kg (down 0.9)\n- Oct 1: 82.2 kg (down 0.9)\n\nThat's a steady 0.9 kg a month. Nice work!",
+      "cost": 0.029032,
+      "error": null
+    },
+    {
+      "q": "When is it going to rain?",
+      "expects": "city",
+      "type": "profile",
+      "answer_any": [
+        "austin"
+      ],
+      "hit": true,
+      "answered": false,
+      "recalled": [],
+      "answer": "",
+      "cost": 0.013436,
+      "error": "API error 400: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cg2tKjokxXvrfvJHBTKsR'}"
+    },
+    {
+      "q": "Find me a good coffee shop nearby.",
+      "expects": "city",
+      "type": "profile",
+      "answer_any": [
+        "austin"
+      ],
+      "hit": true,
+      "answered": false,
+      "recalled": [],
+      "answer": "",
+      "cost": 0.0,
+      "error": "API error 400: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cg2tKmDr7yyZswB4hZY82'}"
+    },
+    {
+      "q": "What should I make for dinner tonight?",
+      "expects": "diet",
+      "type": "profile",
+      "answer_any": [
+        "vegetarian",
+        "meatless",
+        "plant-based"
+      ],
+      "hit": true,
+      "answered": false,
+      "recalled": [],
+      "answer": "",
+      "cost": 0.0,
+      "error": "API error 400: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cg2tKmw12vN9QF56Bt4Ju'}"
+    }
+  ]
+}
