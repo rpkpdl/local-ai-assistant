@@ -136,3 +136,28 @@ def test_series_point_without_value_takes_number_from_content(store):
                                      content="User weighed 82.4 kg on 2026-10-14")]), store)
     lib("Weighed 82.4 this morning")
     assert store.all()[0].value == "82.4"
+
+
+def test_fallback_options_skip_haiku():
+    from assistant.models import fallback_options
+    assert fallback_options("claude-haiku-5-5") == {}
+    assert fallback_options("claude-opus-5-5")["fallbacks"] == "default"
+
+
+def test_haiku_librarian_sends_no_fallbacks(store):
+    client = FakeClient([])
+    Librarian(client, store, model="claude-haiku-5-5")("hi")
+    assert "fallbacks" not in client.requests[0] and "betas" not in client.requests[0]
+
+
+def test_model_settings_come_from_env_at_import():
+    """LIBRARIAN_MODEL / JUDGE_MODEL must be read after .env is loaded (package import)."""
+    import subprocess
+    import sys
+    code = ("import assistant.judge as j, assistant.memory.librarian as l; "
+            "print(j.JUDGE_MODEL, l.LIBRARIAN_MODEL)")
+    env = {"JUDGE_MODEL": "claude-haiku-5-5", "LIBRARIAN_MODEL": "claude-haiku-5-5",
+           "PATH": "/usr/bin:/bin"}
+    out = subprocess.run([sys.executable, "-c", code], env=env, capture_output=True, text=True,
+                         check=True).stdout.split()
+    assert out == ["claude-haiku-5-5", "claude-haiku-5-5"]

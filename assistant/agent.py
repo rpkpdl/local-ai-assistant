@@ -28,17 +28,15 @@ from collections.abc import Callable, Iterator
 
 import anthropic
 from anthropic import beta_tool
-from dotenv import load_dotenv
 
 from .judge import SourceJudge
 from .memory import MemoryStore
 from .memory.consolidate import consolidate, due
 from .memory.librarian import Librarian
+from .models import fallback_options
 from .tracing import in_caller_context, setup_tracing, trace_tools, turn_span
 from .web.search import BraveSearch
 from .web.tools import make_web_tools
-
-load_dotenv()  # reads ANTHROPIC_API_KEY etc. from .env
 
 # ASSISTANT_MODEL in .env picks the agent's model. Anything not starting with "claude-" is run
 # locally through Ollama's Anthropic-compatible API (e.g. gemma4:e4b). The source judge always
@@ -266,12 +264,7 @@ class Agent:
             # Gemma reasons before every reply unless told not to; off is ~3x faster on CPU
             options = {"thinking": {"type": "disabled"}}
         else:
-            options = {
-                "output_config": {"effort": EFFORT},
-                # Server-side fallback: if a request is declined, the API retries it on a suitable model.
-                "betas": ["server-side-fallback-2026-07-01"],
-                "fallbacks": "default",
-            }
+            options = {"output_config": {"effort": EFFORT}, **fallback_options(MODEL)}
         runner = self.client.beta.messages.tool_runner(
             model=MODEL,
             max_tokens=16000,

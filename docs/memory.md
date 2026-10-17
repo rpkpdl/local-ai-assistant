@@ -57,7 +57,9 @@ isn't delayed but the input box waits for it. The web UI shows "Updating memoryâ
 It defaults to `claude-opus-5-5` at effort `low`. In the write eval that cost about $0.014 per
 turn and scored 34/34. `claude-haiku-5-5` scored 34/34 on decisions and items (one missed series
 value, now filled in by code) for about $0.0004 per turn. Set `LIBRARIAN_MODEL=claude-haiku-5-5` in
-`.env` to switch, or `ASSISTANT_LIBRARIAN=off` to disable it. The librarian always runs on Claude,
+`.env` to switch, or `ASSISTANT_LIBRARIAN=off` to disable it. Since 2026-10-17 this machine runs the
+agent, librarian and source judge all on Haiku (about $0.0005 for a short turn), after Haiku
+matched or beat Opus on every eval (see [findings](findings.md)). The librarian always runs on Claude,
 even when the agent runs on Ollama.
 
 ## Migrating an existing database

@@ -209,10 +209,10 @@ Tests check correctness. [Evals](evals/) measure behavior, with scores tracked o
 | Eval | What it measures | Latest result |
 |---|---|---|
 | Memory recall (retrieval) | Does memory search find the right fact? 30 questions: paraphrased, updated, time series, implied | paraphrases: 1/12 plain, **10/12** with the librarian's keywords (search alone) |
-| Memory recall (agent) | Does the agent answer correctly? | Opus 27/27 answered (3 not run), Gemma 4 28/30 |
+| Memory recall (agent) | Does the agent answer correctly? | Haiku **30/30**, Opus 27/27 answered (3 not run), Gemma 4 28/30 |
 | Librarian | Does it store the right things (and nothing for small talk, trivia or a PIN)? 34 turns | Opus **34/34**, Haiku 34/34 at 1/40th the cost |
-| Associative recall | Does the agent bring up a relevant past experience, and stay quiet otherwise? 21 messages | Opus **11/11** brought up, 7/10 stayed quiet |
-| Source judge | Approve good APIs, reject junk pages and 5 prompt-injection attempts | **11/11**, including all 5 injections |
+| Associative recall | Does the agent bring up a relevant past experience, and stay quiet otherwise? 21 messages | **11/11** brought up on Opus and Haiku; stayed quiet 7/10 (Opus), 8/10 (Haiku) |
+| Source judge | Approve good APIs, reject junk pages and 5 prompt-injection attempts | **11/11**, including all 5 injections, on Opus and Haiku |
 
 Keyword search alone misses paraphrases. Having the librarian write retrieval keywords once,
 when it stores a memory, fixed most of that without vector search. Details and caveats are in

@@ -67,6 +67,7 @@ Modes:
 | 2026-10-14 | retrieval (k=5), search + profile | FTS5, enriched seeds | 10/10 | 12/12 | 3/3 | 1/2 | 3/3 | 29/30 | $0.06 |
 | 2026-10-14 | agent, answered | claude-opus-5-5, enriched | 10/10 | 12/12 | 3/3 | 2/2 | not run† | 27/27 | $0.58 |
 | 2026-10-14 | agent, answered | gemma4:e4b, enriched | 8/10 | 12/12 | 3/3 | 2/2 | **3/3** | 28/30 | $0.06‡ |
+| 2026-10-17 | agent, answered | claude-haiku-5-5 (agent + librarian), enriched | 10/10 | 12/12 | 3/3 | 2/2 | 3/3 | **30/30** | $0.044 |
 
 \* Run before the possessive fix ("Biscuit's" didn't match "Biscuit"); the plain run after it
 gets 10/10. † The API credit balance ran out on the last three questions; they errored and weren't
@@ -133,6 +134,7 @@ questions about memory.
 | 2026-10-14 | retrieval, enriched seeds | | **11/11** | 4/5 | 1/5 | 16/21 | $0.03 |
 | 2026-10-14 | agent, enriched seeds | claude-opus-5-5 | **11/11** | 3/5 | 4/5 | 18/21 | $0.64 |
 | 2026-10-14 | agent, enriched seeds | gemma4:e4b | 10/11 | 5/5 | 2/5 | 17/21 | $0.03 |
+| 2026-10-17 | agent, enriched seeds | claude-haiku-5-5 (agent + librarian) | **11/11** | 4/5 | 4/5 | **19/21** | $0.019 |
 
 - Without keywords, association only has the hand-written themes, and 2/11 fire. With the
   librarian's keywords, all 11 do, including "Advil" finding the ibuprofen reaction.
@@ -161,6 +163,7 @@ approve or reject.
 | Date | Model | good | junk | injection | all | Cost |
 |---|---|---|---|---|---|---|
 | 2026-10-13 | claude-opus-5-5 (effort low) | 3/3 | 3/3 | 5/5 | 11/11 | $0.05 |
+| 2026-10-17 | claude-haiku-5-5 (effort low) | 3/3 | 3/3 | 5/5 | 11/11 | $0.0013 |
 
 The saved verdict reasons show each injection was rejected *because* of the manipulation
 attempt, not just because the domain was unknown.

@@ -410,7 +410,8 @@ def main():
 
     cost = usage.cost + agent_cost
     print_table(summary, fields)
-    print(f"\nmodel {model}" + (f", librarian {lib_model}" if usage.messages else "")
+    uses_librarian = args.eval == "write" or args.enrich
+    print(f"\nmodel {model}" + (f", librarian {lib_model}" if uses_librarian else "")
           + f", cost ${cost:.4f}, {time.time() - started:.0f} s")
 
     if not args.no_save and not args.limit:  # partial runs aren't results
@@ -420,7 +421,7 @@ def main():
             slug += "" if args.eval == "write" else f"_lib-{lib_model}"
         out = RESULTS / f"{time.strftime('%Y-%m-%d')}_{name}_{slug}.json"
         out.write_text(json.dumps({"eval": name, "model": model, "librarian_model": lib_model
-                                   if usage.messages else None, "date": time.strftime("%F"),
+                                   if uses_librarian else None, "date": time.strftime("%F"),
                                    "cost": round(cost, 4), "summary": summary, "rows": rows},
                                   indent=2, ensure_ascii=False, default=str))
         print(f"saved {out.relative_to(HERE.parent)}")

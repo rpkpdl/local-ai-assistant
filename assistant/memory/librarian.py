@@ -20,6 +20,7 @@ from dataclasses import dataclass
 
 import anthropic
 
+from ..models import fallback_options
 from .store import ENTITY_TYPES, KINDS, MODES, PROVENANCES, MemoryStore
 
 LIBRARIAN_MODEL = os.getenv("LIBRARIAN_MODEL") or "claude-opus-5-5"
@@ -281,10 +282,6 @@ class Librarian:
     # --- internals -------------------------------------------------------------
 
     def _call(self, system: str, prompt: str, schema: dict) -> dict | None:
-        options = {}
-        if not self.model.startswith("claude-haiku"):
-            # Server-side fallback: if a request is declined, the API retries it on a suitable model
-            options = {"betas": ["server-side-fallback-2026-07-01"], "fallbacks": "default"}
         t0 = time.time()
         self.error = None
         try:
@@ -295,7 +292,7 @@ class Librarian:
                 messages=[{"role": "user", "content": prompt}],
                 output_config={"effort": self.effort,
                                "format": {"type": "json_schema", "schema": schema}},
-                **options,
+                **fallback_options(self.model),
             )
         except anthropic.APIError as e:
             self.error = f"{e.__class__.__name__}: {getattr(e, 'message', e)}"

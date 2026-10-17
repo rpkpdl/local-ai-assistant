@@ -7,6 +7,36 @@ is updated when a fix lands, so each finding ends with a measured result.
 Examples use generic or synthetic details, never the real contents of the memory database.
 ---
 
+## 2026-10-17: Haiku 5.5 matches Opus 5.5 on every eval at a fraction of the cost
+
+**Observed:** Each turn ran two Opus calls (agent and librarian), about $0.03 to $0.07 per turn.
+
+**Evidence:** The same evals, with Haiku as the agent, librarian and judge:
+
+| Eval | claude-opus-5-5 | claude-haiku-5-5 |
+|---|---|---|
+| Memory recall, answered | 27/27 (3 not run) · $0.58 | 30/30 · $0.044 |
+| Associative recall | 18/21 · $0.64 | 19/21 · $0.019 |
+| Librarian (write) | 34/34 items · $0.47 | 34/34 items · $0.012 |
+| Source judge, injections | 11/11, 5/5 · $0.05 | 11/11, 5/5 · $0.0013 |
+
+Haiku's injection rejections cite the manipulation itself, as Opus's do. A live short turn on
+Haiku cost $0.00054.
+
+**Cause:** These tasks are short and well-specified: tool choice, structured extraction, and a
+yes/no verdict. A smaller model handles them, and the evals are small (21-34 cases), so a gap
+of one case is noise.
+
+**Decision / next step:** The agent, librarian and judge all run on Haiku on this machine
+(`.env`). The code default stays Opus. Watch real turns in Phoenix for multi-step web tasks,
+which the evals don't cover. Switching also turned up a bug: `JUDGE_MODEL` and
+`LIBRARIAN_MODEL` were read before `.env` was loaded, so they silently stayed on Opus. `.env` now
+loads when the package is imported, and a test covers it.
+
+**Status:** Shipped on feature/memory-groundwork (uncommitted as of this entry).
+
+---
+
 ## 2026-10-14: Write-time keywords fix paraphrase recall without vectors
 
 **Observed:** Keyword search missed nearly every paraphrase (0/12, then 1/12 with the porter
