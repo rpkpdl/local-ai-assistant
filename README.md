@@ -175,7 +175,10 @@ checks your `.env`, and starts Phoenix if tracing is enabled. To use a local mod
 | `ANTHROPIC_API_KEY` | Required |
 | `BRAVE_API_KEY` | Enables web search. Without it, fetching and saved sources still work |
 | `BRAVE_MONTHLY_LIMIT` | Monthly search cap (default 1000) |
-| `ASSISTANT_MODEL` | e.g. `gemma4:e4b` to run on Ollama. Defaults to Claude |
+| `ASSISTANT_MODEL` | The agent's model. Defaults to `claude-opus-5-5`. Any Claude model works (e.g. `claude-haiku-5-5`), and a name like `gemma4:e4b` runs it on Ollama |
+| `LIBRARIAN_MODEL` | The model that decides what to store after each turn. Defaults to `claude-opus-5-5` |
+| `JUDGE_MODEL` | The model that checks sources before they're saved. Defaults to `claude-opus-5-5`. Run `evals/run_eval.py judge` before changing it |
+| `ASSISTANT_LIBRARIAN` | `off` turns the librarian off, so nothing new is stored |
 | `OLLAMA_URL` | Defaults to `http://127.0.0.1:11434` |
 | `PHOENIX_COLLECTOR_ENDPOINT` | Enables tracing. Phoenix UI on http://127.0.0.1:6006 |
 
@@ -188,8 +191,8 @@ checks your `.env`, and starts Phoenix if tracing is enabled. To use a local mod
 
 The tests focus on the security guards: blocked URLs, private and metadata IPs at connect time,
 redirects into private networks, content types, Host/Origin/CSRF checks on the server, the
-checks around saving sources, and the memory stores. CI runs them on every push, plus a Docker
-build and smoke test.
+checks around saving sources, the memory store and the librarian's validation. CI runs them on
+pushes to `main` and on pull requests, plus a Docker build and smoke test.
 
 ### Keeping personal data out of the repo
 
@@ -254,3 +257,7 @@ memory when Claude did.
    keywords stop being enough.
 4. **Multi-device sync:** UUID ids, timestamps and soft deletes.
 5. **More evals:** a held-out recall set, and an end-to-end store-then-surface scenario.
+
+## License
+
+[MIT](LICENSE)

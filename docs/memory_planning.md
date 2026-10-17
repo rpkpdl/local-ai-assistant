@@ -1,5 +1,8 @@
 # Memory Groundwork Spec — Lightweight Self-Improving Personal Assistant
 
+> The original design spec, written before the build. What was built, and where it differs from this
+> spec, is in [memory.md](memory.md). Measured results are in [evals/README.md](../evals/README.md).
+
 ## Context
 
 A personal AI assistant, currently running on a mini PC with no GPU, with a target of eventually running on a phone or another lightweight device. It already has:
