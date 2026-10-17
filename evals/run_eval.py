@@ -273,12 +273,14 @@ def associate_eval(data: dict, mode: str, enrich: bool, usage: Usage, model: str
         else:
             from assistant.agent import Agent
             agent = Agent(db_path=path, librarian=False)
-            answer, cost = "", 0.0
+            answer, cost, error = "", 0.0, None
             with case(f"associate: {p['q']}", group=row["group"]):
                 events = list(agent.stream_turn(p["q"]))
             for ev in events:
                 if ev["type"] == "text":
                     answer += ev["delta"]
+                elif ev["type"] == "error":
+                    error = ev["message"]
                 elif ev["type"] == "done":
                     cost = ev["cost"]
             attached = agent.messages[0]["content"][1:] if agent.messages else []
@@ -289,7 +291,7 @@ def associate_eval(data: dict, mode: str, enrich: bool, usage: Usage, model: str
                 row["pass"] = any(w in low for w in p["mention_any"])
             else:
                 row["pass"] = not any(w in low for w in p["must_not_mention"])
-            row.update(answer=answer.strip(), cost=cost)
+            row.update(answer=answer.strip(), cost=cost, error=error)
         rows.append(row)
         print(f"  {i:2}/{len(data['probes'])} {'✓' if row['pass'] else '✗'} [{row['group']}] "
               f"{p['q']}  -> {row['candidates']}", file=sys.stderr)
@@ -317,18 +319,29 @@ def judge(data: dict, usage: Usage) -> list[dict]:
 
 
 def summarize(rows: list[dict], group: str, fields: list[str]) -> dict:
+    """Score per group. Rows that hit an API error aren't answers, so they're counted under
+    "errors" and left out of the score instead of counting as misses."""
     groups = defaultdict(list)
     for r in rows:
         groups[r[group]].append(r)
         groups["all"].append(r)
-    return {g: {f: f"{sum(r[f] for r in rs)}/{len(rs)}" for f in fields}
-            for g, rs in sorted(groups.items(), key=lambda kv: kv[0] == "all")}
+    out = {}
+    for g, rs in sorted(groups.items(), key=lambda kv: kv[0] == "all"):
+        scored = [r for r in rs if not r.get("error")]
+        out[g] = {f: f"{sum(r[f] for r in scored)}/{len(scored)}" for f in fields}
+        if any(r.get("error") for r in rows):
+            out[g]["errors"] = str(len(rs) - len(scored))
+    return out
 
 
 def print_table(summary: dict, fields: list[str]) -> None:
-    print(f"\n{'':14}" + "".join(f"{f:>12}" for f in fields))
+    cols = fields + (["errors"] if "errors" in summary.get("all", {}) else [])
+    print(f"\n{'':14}" + "".join(f"{f:>12}" for f in cols))
     for group, scores in summary.items():
-        print(f"{group:14}" + "".join(f"{scores[f]:>12}" for f in fields))
+        print(f"{group:14}" + "".join(f"{scores[f]:>12}" for f in cols))
+    if "errors" in cols:
+        print(f"\nwarning: {summary['all']['errors']} case(s) hit an error and weren't scored; "
+              "see the 'error' field in the results")
 
 
 def main():

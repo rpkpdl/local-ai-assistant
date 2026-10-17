@@ -1,10 +1,43 @@
 # Findings
 
-Things observed while building and using the assistant, newest first. Each entry records what
-happened, the evidence (traces, eval numbers), the cause, and what was decided. The status line
-is updated when a fix lands, so each finding ends with a measured result.
+What building and running the assistant has taught us, backed by traces and eval numbers. Each
+entry records what was observed, the evidence, the cause, and what was decided. Its status line
+names the commit that resolved it and the measured result. Entries are newest first.
 
 Examples use generic or synthetic details, never the real contents of the memory database.
+
+## Key learnings
+
+1. **Put the thinking at write time, not query time.** A one-off LLM pass that writes retrieval
+   keywords for each memory fixed paraphrase recall (1/12 → 10/12) with plain keyword search, no
+   embeddings needed.
+2. **Don't make critical context depend on the model choosing a tool.** A small model never
+   called `recall`, so core facts now sit in an always-present profile. Gemma then answered
+   every location-dependent question.
+3. **A gate only controls what you push.** An agent that searches on its own will find what the
+   gate held back. Policy has to apply on both paths.
+4. **Measure before assuming you need the big model.** On these tasks Haiku 5.5 matched Opus 5.5
+   on every eval at 1/10 to 1/40 of the cost, including the prompt-injection check.
+5. **Check that the configuration you set is the one running.** Two model settings were silently
+   ignored because they were read before `.env` loaded. Only checking the resolved values
+   revealed it.
+6. **Instrument evals like production.** Eval spend was invisible to the cost dashboard, and
+   cross-thread trace context was being lost, until both were traced and verified.
+7. **An infrastructure error isn't a wrong answer.** Eval rows that failed on an API error were
+   counted as misses, so a run cut short looked like a quality drop. They're now reported
+   separately.
+
+## Status index
+
+| Date | Finding | Status |
+|---|---|---|
+| 2026-10-17 | Haiku 5.5 matches Opus 5.5 on every eval | Shipped, `1d7b91b` |
+| 2026-10-14 | Eval rows that errored were scored as misses | Fixed ("Score errored eval rows separately") |
+| 2026-10-14 | Eval spend wasn't in Phoenix, and traces split across threads | Fixed, `85debc3` |
+| 2026-10-14 | Write-time keywords fix paraphrase recall without vectors | Shipped, `85debc3` |
+| 2026-10-14 | The association gate doesn't control the agent's own searches | Open |
+| 2026-10-13 | Local model skips memory recall | Fixed, `85debc3` |
+
 ---
 
 ## 2026-10-17: Haiku 5.5 matches Opus 5.5 on every eval at a fraction of the cost
@@ -33,7 +66,56 @@ which the evals don't cover. Switching also turned up a bug: `JUDGE_MODEL` and
 `LIBRARIAN_MODEL` were read before `.env` was loaded, so they silently stayed on Opus. `.env` now
 loads when the package is imported, and a test covers it.
 
-**Status:** Shipped on feature/memory-groundwork (uncommitted as of this entry).
+**Status:** Shipped in `1d7b91b`: Haiku is the default on this machine, and the code default is
+unchanged. The `.env` loading bug is fixed in the same commit, with a regression test.
+
+---
+
+## 2026-10-14: Eval rows that errored were scored as misses
+
+**Observed:** The API credit balance ran out during the Opus memory-recall run. The last three
+questions show as "not answered", which reads as a quality problem.
+
+**Evidence:** The three rows in
+`evals/results/2026-10-14_memory_agent_enriched_claude-opus-5-5_lib-claude-opus-5-5.json` have an
+empty answer and `"error": "API error 400: ... credit balance is too low ..."`. The summary still
+counts them as 0/3 for `profile`.
+
+**Cause:** The runner stores the error on the row but scores the row like any other.
+
+**Decision / next step:** Report errored rows separately: an `errors` column in the summary,
+left out of the score, and a warning at the end of any run that had them. Associative-recall
+agent runs now record errors too.
+
+**Status:** Fixed in the commit "Score errored eval rows separately". The same results file now
+summarizes as 27/27 answered with 3 errors, instead of 27/30. Results files saved before the fix
+keep their old summaries; their rows have the `error` field.
+
+---
+
+## 2026-10-14: Eval spend wasn't in Phoenix, and traces split across threads
+
+**Observed:** Phoenix showed $1.86 of app traffic, but none of the roughly $2.40 spent running evals
+that day. Once evals were traced, each agent turn appeared as a separate trace from the eval case
+that started it.
+
+**Evidence:** `evals/run_eval.py` cleared `PHOENIX_COLLECTOR_ENDPOINT` on purpose. After that was
+changed, a 2-question eval run produced 4 traces, not 2. A run with no LLM calls produced 157
+traces containing only SQL queries.
+
+**Cause:**
+- Evals were deliberately left untraced to keep them isolated, which also hid their cost.
+- `Agent.stream_turn` runs the turn on a worker thread, and OpenTelemetry's context doesn't follow
+  a thread on its own. The turn span started a new trace.
+- Every SQL query outside a span became its own root trace.
+
+**Decision / next step:** Evals trace into their own Phoenix project, `personal-assistant-evals`,
+with one session per run and one trace per case. The turn thread runs in the caller's trace
+context (`tracing.in_caller_context`). SQL spans are recorded only inside a turn or tool.
+Librarian calls nest under their turn.
+
+**Status:** Fixed in `85debc3`. Re-run: 2 cases → 2 traces in one session, with tokens on every
+LLM span. Runs before this commit are only in the results files.
 
 ---
 
@@ -60,11 +142,12 @@ ibuprofen reaction.
 time, instead of per query. This is query expansion stored as data.
 
 **Decision / next step:** Proposed, not yet decided: keep FTS5 and move vector search down the
-roadmap, unless a held-out question set (written without seeing the keywords) scores much lower. Existing memories
-need `python -m assistant.memory.consolidate --enrich` once to get keywords.
+roadmap, unless a held-out question set (written without seeing the keywords) scores much
+lower. Existing memories need `python -m assistant.memory.consolidate --enrich` once to get
+keywords.
 
-**Status:** Shipped in the memory groundwork (uncommitted as of this entry). Results:
-[evals/README.md](../evals/README.md).
+**Status:** Shipped in `85debc3`. Haiku 5.5 as the librarian gives the same recall (30/30
+answered in agent mode). Results: [evals/README.md](../evals/README.md).
 
 ---
 
@@ -122,8 +205,8 @@ Vector search alone wouldn't fix this, because the local model never searched at
 - Add "When is it going to rain?" (expects the location memory) to the memory eval, and run
   agent mode on both models to measure the gap.
 
-**Status:** Fixed in the memory groundwork (uncommitted as of 2026-10-14). The profile holds user
-facts with an attribute, relationships and tracked series, in its own system block. In the recall
-eval, gemma4:e4b answered all 3 profile questions using the stored city or diet without a tool
-call ("Since you live in Austin..."). The Opus run of those 3 hit the API credit limit, so it
-wasn't measured.
+**Status:** Fixed in `85debc3`. The profile holds user facts with an attribute, relationships and
+tracked series, in its own system block. In the recall eval, gemma4:e4b answered all 3 profile
+questions from the stored city or diet without a tool call ("Since you live in Austin...").
+claude-haiku-5-5 also answered 3/3 (2026-10-17). The Opus run of those 3 hit the API credit
+limit and wasn't measured.

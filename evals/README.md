@@ -21,6 +21,8 @@ sets the librarian's model for `write` and `--enrich`.
 
 Every run uses a throwaway database, with web search turned off. `--limit N` runs only the first
 N cases, for a quick check (nothing is saved).
+Cases that hit an API error (rate limit, no credit) aren't scored: the summary counts them
+under `errors` and the run ends with a warning.
 
 **Cost tracking:** when tracing is on in `.env`, every LLM call goes to the Phoenix project
 `personal-assistant-evals`, separate from real use (`personal-assistant`). Each run is one
