@@ -54,7 +54,7 @@ def test_no_api_docs(client, path):
 
 
 def test_http_requests_create_no_spans(client):
-    # FastAPI >= 0.143 traces every request through the global tracer provider. In Phoenix
+    # FastAPI 0.143 traces every request through the global tracer provider. In Phoenix
     # that buried each agent "turn" under a "POST /api/chat" root span (findings 2026-10-19).
     from opentelemetry import trace
     from opentelemetry.sdk.trace import TracerProvider
@@ -65,6 +65,8 @@ def test_http_requests_create_no_spans(client):
     provider = TracerProvider()
     provider.add_span_processor(SimpleSpanProcessor(exporter))
     trace.set_tracer_provider(provider)
+    # It can only be set once per process; otherwise this test would pass without checking
+    assert trace.get_tracer_provider() is provider
     client.get("/api/state")
     client.post("/api/chat", json={"message": ""}, headers=ORIGIN)
     assert [s.name for s in exporter.get_finished_spans()] == []

@@ -32,7 +32,7 @@ Examples use generic or synthetic details, never the real contents of the memory
 
 | Date | Finding | Status |
 |---|---|---|
-| 2026-10-19 | FastAPI's built-in tracing hid agent turns in Phoenix | Fixed on `fix/fastapi-otel-spans` |
+| 2026-10-19 | FastAPI's built-in tracing hid agent turns in Phoenix | Fixed, `cc193c1` |
 | 2026-10-17 | Haiku 5.5 matches Opus 5.5 on every eval | Shipped, `571c317` |
 | 2026-10-14 | Eval rows that errored were scored as misses | Fixed, `4db387e` |
 | 2026-10-14 | Eval spend wasn't in Phoenix, and traces split across threads | Fixed, `a506f38` |
@@ -62,8 +62,8 @@ cross-thread trace context. Neither change had a test of the trace shape.
 is the root again, and require `fastapi>=0.143`. `tests/test_server.py` now checks that HTTP
 requests produce no spans; it fails without the fix.
 
-**Status:** Fixed on branch `fix/fastapi-otel-spans` (not merged yet). Traces recorded before the
-fix keep the old nesting.
+**Status:** Fixed in `cc193c1`: the new test fails without the fix and passes with it. Traces
+recorded before the fix keep the old nesting.
 
 ---
 
