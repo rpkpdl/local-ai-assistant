@@ -32,12 +32,38 @@ Examples use generic or synthetic details, never the real contents of the memory
 
 | Date | Finding | Status |
 |---|---|---|
+| 2026-10-19 | FastAPI's built-in tracing hid agent turns in Phoenix | Fixed, `cc193c1` |
 | 2026-10-17 | Haiku 5.5 matches Opus 5.5 on every eval | Shipped, `571c317` |
 | 2026-10-14 | Eval rows that errored were scored as misses | Fixed, `4db387e` |
 | 2026-10-14 | Eval spend wasn't in Phoenix, and traces split across threads | Fixed, `a506f38` |
 | 2026-10-14 | Write-time keywords fix paraphrase recall without vectors | Shipped, `a506f38` |
 | 2026-10-14 | The association gate doesn't control the agent's own searches | Open |
 | 2026-10-13 | Local model skips memory recall | Fixed, `a506f38` |
+
+---
+
+## 2026-10-19: FastAPI's built-in tracing hid agent turns in Phoenix
+
+**Observed:** The Phoenix span list (root spans only) showed HTTP requests (`GET /api/state`,
+`POST /api/chat`, ...) of kind `unknown` with no input or output, and the project stats showed
+a total cost of $0. The agent's `turn` spans were missing from the root list.
+
+**Evidence:** FastAPI 0.143 (installed 2026-10-13) emits OpenTelemetry spans for every request
+through the global tracer provider, which `phoenix.otel.register()` sets. HTTP root spans go back
+to the first traced turns. Until 2026-10-13 `turn` was still a root span of its own, because the
+worker thread lost the trace context. After `a506f38` (`in_caller_context`, 2026-10-15) each turn
+nested under `POST /api/chat`, so it dropped out of the root list. The stats panel only counts
+the spans it lists, so none of the LLM cost showed up there.
+
+**Cause:** An upstream default (FastAPI telemetry is on), together with our own fix for
+cross-thread trace context. Neither change had a test of the trace shape.
+
+**Decision / next step:** Turn off FastAPI telemetry with `FastAPI(telemetry={...})`, so `turn`
+is the root again, and require `fastapi>=0.143`. `tests/test_server.py` now checks that HTTP
+requests produce no spans; it fails without the fix.
+
+**Status:** Fixed in `cc193c1`: the new test fails without the fix and passes with it. Traces
+recorded before the fix keep the old nesting.
 
 ---
 

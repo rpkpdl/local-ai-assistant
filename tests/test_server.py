@@ -51,3 +51,22 @@ def test_chat_rejects_empty_message(client):
 @pytest.mark.parametrize("path", ["/docs", "/redoc", "/openapi.json"])
 def test_no_api_docs(client, path):
     assert client.get(path).status_code == 404
+
+
+def test_http_requests_create_no_spans(client):
+    # FastAPI 0.143 traces every request through the global tracer provider. In Phoenix
+    # that buried each agent "turn" under a "POST /api/chat" root span (findings 2026-10-19).
+    from opentelemetry import trace
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import SimpleSpanProcessor
+    from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
+
+    exporter = InMemorySpanExporter()
+    provider = TracerProvider()
+    provider.add_span_processor(SimpleSpanProcessor(exporter))
+    trace.set_tracer_provider(provider)
+    # It can only be set once per process; otherwise this test would pass without checking
+    assert trace.get_tracer_provider() is provider
+    client.get("/api/state")
+    client.post("/api/chat", json={"message": ""}, headers=ORIGIN)
+    assert [s.name for s in exporter.get_finished_spans()] == []

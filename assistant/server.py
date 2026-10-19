@@ -28,7 +28,11 @@ ALLOWED_ORIGINS = (f"http://127.0.0.1:{PORT}", f"http://localhost:{PORT}")
 STATIC = Path(__file__).parent / "static"
 
 agent = Agent()
-app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
+# FastAPI's built-in OpenTelemetry would make every HTTP request a root span in Phoenix,
+# burying the agent's "turn" traces under "POST /api/chat". Our own spans are enough.
+app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None,
+              telemetry={"tracing": False, "operation_spans": False, "metrics": False,
+                         "logs": False})
 app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost"])
 
 
